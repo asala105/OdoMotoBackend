@@ -20,7 +20,8 @@ class CreateLeavesTable extends Migration
             $table->date('leave_from_date');
             $table->date('leave_till_date');
             $table->string('leave_type');
-            $table->mediumText('details');
+            $table->mediumText('details')->nullable();
+            $table->timestamps();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });

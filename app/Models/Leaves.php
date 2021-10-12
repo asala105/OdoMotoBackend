@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Leaves extends Model
 {
     use HasFactory;
+    protected $fillable = ['status_id', 'user_id', 'leave_from_date', 'leave_till_date', 'leave_type', 'details'];
 }

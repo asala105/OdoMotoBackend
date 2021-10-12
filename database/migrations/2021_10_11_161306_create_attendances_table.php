@@ -20,6 +20,7 @@ class CreateAttendancesTable extends Migration
             $table->date('date');
             $table->time('working_from', $precision = 0);
             $table->time('working_to', $precision = 0);
+            $table->timestamps();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
