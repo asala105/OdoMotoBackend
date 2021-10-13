@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use Auth;
 
 class AttendanceController extends Controller
 {
@@ -17,23 +18,20 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
-        $validator = Validator::make($request->all(), [
-            'leave_from_date' => 'required|date|after_or_equal:today|date_format:Y-m-d',
-            'leave_till_date' => 'required|date|after_or_equal:leave_from_date|date_format:Y-m-d',
-            'leave_type' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        $manager = $user->manager; //needed to send the notification
+        $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->get();
+        if (empty($registeredAttendance)) {
+            $attendance = Attendance::create([
+                'status_id' => 1,
+                'user_id' => $userId,
+                'date' => date('Y-m-d'),
+                'working_from' => date("H:i"),
+                'working_to' => date("H:i"),
+            ]);
+            return json_encode(['success' => true, 'message' => 'attendance record is created, it will be sent to your manger for approval', 'attendance' => $attendance]);
+        } else {
+            return json_encode(['success' => false, 'message' => 'attendance record is already created', 'attendance' => $registeredAttendance]);
         }
-        $organization = Leaves::create([
-            'status_id' => 1,
-            'user_id' => $userId,
-            'leave_from_date' => $request->leave_from_date,
-            'leave_till_date' => $request->leave_till_date,
-            'leave_type' => $request->leave_type,
-            'details' => $request->details,
-        ]);
-        return json_encode(['success' => true, 'message' => 'Leave request is created, it will be sent to your manger for approval', 'organization' => $organization]);
     }
 
     /**

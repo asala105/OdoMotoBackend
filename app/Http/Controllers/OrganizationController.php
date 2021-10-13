@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Organization;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class OrganizationController extends Controller
@@ -36,8 +37,10 @@ class OrganizationController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-        $organization = Department::create(['name' => $request->name]);
-        return json_encode(['success' => true, 'message' => 'organization successfully added', 'organization' => $organization]);
+        $user = Auth::user();
+        $org = $user->department->organization;
+        $department = Department::create(['name' => $request->name, 'organization_id' => $org->id]);
+        return json_encode(['success' => true, 'message' => 'department successfully added', 'department' => $department]);
     }
 
     /**
