@@ -35,7 +35,12 @@ class LeavesController extends Controller
             'leave_type' => $request->leave_type,
             'details' => $request->details,
         ]);
-        return json_encode(['success' => true, 'message' => 'Leave request is created, it will be sent to your manger for approval', 'organization' => $organization]);
+        return json_encode([
+            'success' => true,
+            'message' => 'Leave request is created, it will be sent to your manager for approval',
+            'organization' => $organization
+        ]);
+        //we still need to add notification and email notification to the manager
     }
 
     /**

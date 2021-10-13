@@ -13,6 +13,7 @@ Route::post('register_organization', [OrganizationController::class, 'store']);
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('leave_request', [LeavesController::class, 'store']);
+    Route::post('register_attendance', [AttendanceController::class, 'store']);
     Route::group(['middleware' => ['admin']], function () {
         Route::get('user_profile', [AuthController::class, 'userProfile']);
     });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organization;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,6 +24,19 @@ class OrganizationController extends Controller
             return response()->json($validator->errors(), 422);
         }
         $organization = Organization::create(['name' => $request->name]);
+        return json_encode(['success' => true, 'message' => 'organization successfully added', 'organization' => $organization]);
+    }
+
+    // Add a new department
+    public function addDepartment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        $organization = Department::create(['name' => $request->name]);
         return json_encode(['success' => true, 'message' => 'organization successfully added', 'organization' => $organization]);
     }
 
