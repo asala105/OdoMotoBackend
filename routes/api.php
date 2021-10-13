@@ -15,8 +15,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('leave_request', [LeavesController::class, 'store']);
     Route::get('register_attendance', [AttendanceController::class, 'store']);
+    Route::get('finalize_attendance', [AttendanceController::class, 'finalize']);
+    Route::get('user_profile', [AuthController::class, 'userProfile']);
     Route::group(['middleware' => ['admin']], function () {
-        Route::get('user_profile', [AuthController::class, 'userProfile']);
+        Route::get('approve_attendance', [AttendanceController::class, 'approve']);
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
     });
 });

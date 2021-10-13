@@ -14,7 +14,7 @@ class AttendanceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         $user = Auth::user();
         $userId = $user->id;
@@ -28,12 +28,41 @@ class AttendanceController extends Controller
                 'working_from' => date("H:i"),
                 'working_to' => date("H:i"),
             ]);
-            return json_encode(['success' => true, 'message' => 'attendance record is created, it will be sent to your manger for approval', 'attendance' => $attendance]);
+            return json_encode(['success' => true, 'message' => 'attendance record is created', 'attendance' => $attendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already created', 'attendance' => $registeredAttendance]);
         }
     }
 
+
+    public function finalize()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        $manager = $user->manager; //needed to send the notification
+        $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->first();
+        if (empty($registeredAttendance)) {
+            //maybe go back to store() or send an error message/ warning to the employee
+            // $attendance = Attendance::create([
+            //     'status_id' => 1,
+            //     'user_id' => $userId,
+            //     'date' => date('Y-m-d'),
+            //     'working_from' => date("H:i"),
+            //     'working_to' => date("H:i"),
+            // ]);
+            return json_encode(['success' => false, 'message' => 'you did not register you attendance at the begining of the day!']);
+        } else if ($registeredAttendance->working_from == $registeredAttendance->working_to) {
+            //update the time when he finishes his work and the status in order to send a message to the manager to approve it 
+            $registeredAttendance->status_id = 2;
+            $registeredAttendance->working_to = date("H:i");
+            $registeredAttendance->save();
+            //here we send a notification to the manager!!!
+
+            return json_encode(['success' => true, 'message' => 'attendance record is finalized, it will be sent to your manger for approval', 'attendance' => $registeredAttendance]);
+        } else {
+            return json_encode(['success' => false, 'message' => 'attendance record is already finalized', 'attendance' => $registeredAttendance]);
+        }
+    }
     /**
      * Display the specified resource.
      *
