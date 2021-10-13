@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Validator;
 
 class LeavesController extends Controller
 {
+    /* *********** User APIs *********** */
+    public function getLeavesRecord()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        $leavesRecord = Leaves::where('user_id', $userId)->where('status_id', 4)->orderByDesc('date')->get();
+        return json_encode(['success' => true, 'message' => 'leaves record successfully retrieved', 'attendance' => $leavesRecord]);
+    }
     public function request(Request $request)
     {
         $user = Auth::user();
@@ -37,6 +45,8 @@ class LeavesController extends Controller
         //we still need to add notification and email notification to the manager
     }
 
+
+    /* *********** Admin APIs *********** */
     public function approveByManager($id)
     {
         $LeaveRequest = Leaves::where('id', $id)->where('status_id', 2)->first();

@@ -8,7 +8,7 @@ use Auth;
 
 class AttendanceController extends Controller
 {
-
+    /* *********** User APIs *********** */
     public function getAttendanceRecord()
     {
         $user = Auth::user();
@@ -56,23 +56,7 @@ class AttendanceController extends Controller
             return json_encode(['success' => false, 'message' => 'attendance record is already finalized', 'attendance' => $registeredAttendance]);
         }
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Attendance $attendance)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
     public function approveByManager($id)
     {
         $registeredAttendance = Attendance::where('id', $id)->where('status_id', 2)->first();
