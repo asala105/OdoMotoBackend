@@ -52,6 +52,21 @@ class LeavesController extends Controller
         }
     }
 
+    public function rejectByManager($id)
+    {
+        $LeaveRequest = Leaves::where('id', $id)->where('status_id', 2)->first();
+        if (!empty($LeaveRequest)) {
+            //update the status in order to send a message to the HR to approve it 
+            $LeaveRequest->status_id = 5;
+            $LeaveRequest->save();
+            //here we send a notification to the HR to approve it!!!
+
+            return json_encode(['success' => true, 'message' => 'Leave request is reject by the manager', 'Leaves' => $LeaveRequest]);
+        } else {
+            return json_encode(['success' => false, 'message' => 'Leave request is already approved', 'Leaves' => $LeaveRequest]);
+        }
+    }
+
     public function approveByHR($id)
     {
         $LeaveRequest = Leaves::where('id', $id)->where('status_id', 3)->first();

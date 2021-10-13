@@ -25,6 +25,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::group(['middleware' => ['admin']], function () {
         Route::get('approve_attendance/{id}', [AttendanceController::class, 'approveByManager']);
         Route::get('approve_leave/{id}', [LeavesController::class, 'approveByManager']);
+        Route::get('reject_attendance/{id}', [AttendanceController::class, 'rejectByManager']);
+        Route::get('reject_leave/{id}', [LeavesController::class, 'rejectByManager']);
         Route::get('attendance_records', [AttendanceController::class, 'getAttendanceRecordPerUser']);
         Route::get('leaves_records', [LeavesController::class, 'getLeavesRecordPerUser']);
 

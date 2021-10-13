@@ -41,6 +41,9 @@ class DatabaseSeeder extends Seeder
         DB::table('statuses')->insert([
             'status' => 'approved',
         ]);
+        DB::table('statuses')->insert([
+            'status' => 'rejected',
+        ]);
         DB::table('organizations')->insert([
             'name' => 'organization1',
         ]);
