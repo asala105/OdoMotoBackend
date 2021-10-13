@@ -9,13 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class LeavesController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function request(Request $request)
     {
         $user = Auth::user();
         $userId = $user->id;
@@ -28,7 +22,7 @@ class LeavesController extends Controller
             return response()->json($validator->errors(), 422);
         }
         $organization = Leaves::create([
-            'status_id' => 1,
+            'status_id' => 2,
             'user_id' => $userId,
             'leave_from_date' => $request->leave_from_date,
             'leave_till_date' => $request->leave_till_date,
@@ -43,48 +37,39 @@ class LeavesController extends Controller
         //we still need to add notification and email notification to the manager
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Leaves  $leaves
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Leaves $leaves)
+    public function approveByManager($id)
     {
-        //
+        $LeaveRequest = Leaves::where('id', $id)->where('status_id', 2)->first();
+        if (!empty($LeaveRequest)) {
+            //update the status in order to send a message to the HR to approve it 
+            $LeaveRequest->status_id = 3;
+            $LeaveRequest->save();
+            //here we send a notification to the HR to approve it!!!
+
+            return json_encode(['success' => true, 'message' => 'Leave request is approved by the manager, it will be sent to HR for approval', 'Leaves' => $LeaveRequest]);
+        } else {
+            return json_encode(['success' => false, 'message' => 'Leave request is already approved', 'Leaves' => $LeaveRequest]);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Leaves  $leaves
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Leaves $leaves)
+    public function approveByHR($id)
     {
-        //
+        $LeaveRequest = Leaves::where('id', $id)->where('status_id', 3)->first();
+        if (!empty($LeaveRequest)) {
+            //update the status in order to send a message to the user
+            $LeaveRequest->status_id = 4;
+            $LeaveRequest->save();
+            //here we send a notification to the user!!!
+
+            return json_encode(['success' => true, 'message' => 'Leave request is approved', 'Leaves' => $LeaveRequest]);
+        } else {
+            return json_encode(['success' => false, 'message' => 'Leave request is already approved', 'Leaves' => $LeaveRequest]);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Leaves  $leaves
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Leaves $leaves)
+    public function getLeavesRecordPerUser()
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Leaves  $leaves
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Leaves $leaves)
-    {
-        //
+        $LeavesRecords = Leaves::where('status_id', 4)->orderByDesc('leave_from_date', 'leave_till_date', 'leave_type')->get()->groupBy('user_id');
+        return json_encode(['success' => true, 'message' => 'Leaves records successfully retrieved', 'Leaves' => $LeavesRecords]);
     }
 }
