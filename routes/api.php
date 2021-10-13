@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\VehicleController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
@@ -35,5 +36,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('approve_leave_hr/{id}', [LeavesController::class, 'approveByHR']);
 
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
+        Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
     });
 });
