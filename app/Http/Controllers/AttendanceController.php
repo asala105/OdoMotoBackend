@@ -14,11 +14,10 @@ class AttendanceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function register()
     {
         $user = Auth::user();
         $userId = $user->id;
-        $manager = $user->manager; //needed to send the notification
         $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->get();
         if (empty($registeredAttendance)) {
             $attendance = Attendance::create([
@@ -80,7 +79,7 @@ class AttendanceController extends Controller
      * @param  \App\Models\Attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-    public function approve($id)
+    public function approveByManager($id)
     {
         $registeredAttendance = Attendance::where('id', $id)->where('status_id', 2)->first();
         if (!empty($registeredAttendance)) {
@@ -89,32 +88,25 @@ class AttendanceController extends Controller
             $registeredAttendance->save();
             //here we send a notification to the user and the HR to approve it too!!!
 
-            return json_encode(['success' => true, 'message' => 'attendance record is finalized, it will be sent to your manger for approval', 'attendance' => $registeredAttendance]);
+            return json_encode(['success' => true, 'message' => 'attendance record is approved by the manager, it will be sent to HR for approval', 'attendance' => $registeredAttendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already approved', 'attendance' => $registeredAttendance]);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Attendance $attendance)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Attendance $attendance)
+    public function approveByHR($id)
     {
-        //
+        $registeredAttendance = Attendance::where('id', $id)->where('status_id', 3)->first();
+        if (!empty($registeredAttendance)) {
+            //update the time when he finishes his work and the status in order to send a message to the manager to approve it 
+            $registeredAttendance->status_id = 4;
+            $registeredAttendance->save();
+            //here we send a notification to the user!!!
+
+            return json_encode(['success' => true, 'message' => 'attendance record is approved', 'attendance' => $registeredAttendance]);
+        } else {
+            return json_encode(['success' => false, 'message' => 'attendance record is already approved', 'attendance' => $registeredAttendance]);
+        }
     }
 }

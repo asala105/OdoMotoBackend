@@ -33,10 +33,13 @@ class DatabaseSeeder extends Seeder
             'status' => 'pending',
         ]);
         DB::table('statuses')->insert([
-            'status' => 'approved by manager',
+            'status' => 'sent to manager',
         ]);
         DB::table('statuses')->insert([
-            'status' => 'approved by HR',
+            'status' => 'sent to HR',
+        ]);
+        DB::table('statuses')->insert([
+            'status' => 'approved',
         ]);
         DB::table('organizations')->insert([
             'name' => 'organization1',
