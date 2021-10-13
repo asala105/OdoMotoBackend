@@ -80,9 +80,19 @@ class AttendanceController extends Controller
      * @param  \App\Models\Attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-    public function edit(Attendance $attendance)
+    public function approve($id)
     {
-        //
+        $registeredAttendance = Attendance::where('id', $id)->where('status_id', 2)->first();
+        if (!empty($registeredAttendance)) {
+            //update the time when he finishes his work and the status in order to send a message to the manager to approve it 
+            $registeredAttendance->status_id = 3;
+            $registeredAttendance->save();
+            //here we send a notification to the user and the HR to approve it too!!!
+
+            return json_encode(['success' => true, 'message' => 'attendance record is finalized, it will be sent to your manger for approval', 'attendance' => $registeredAttendance]);
+        } else {
+            return json_encode(['success' => false, 'message' => 'attendance record is already approved', 'attendance' => $registeredAttendance]);
+        }
     }
 
     /**

@@ -18,7 +18,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('finalize_attendance', [AttendanceController::class, 'finalize']);
     Route::get('user_profile', [AuthController::class, 'userProfile']);
     Route::group(['middleware' => ['admin']], function () {
-        Route::get('approve_attendance', [AttendanceController::class, 'approve']);
+        Route::get('approve_attendance/{id}', [AttendanceController::class, 'approve']);
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
     });
 });
