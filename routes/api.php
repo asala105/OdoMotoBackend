@@ -7,12 +7,14 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\NotificationsController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('register_organization', [OrganizationController::class, 'store']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
+    Route::post('register_for_notifications', [NotificationsController::class, 'registerToken']);
     Route::get('user_profile', [AuthController::class, 'userProfile']);
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 

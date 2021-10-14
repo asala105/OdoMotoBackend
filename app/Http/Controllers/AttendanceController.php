@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
+use ExpoSDK\ExpoMessage;
+use ExpoSDK\Expo;
+use App\Models\NotificationToken;
 
 class AttendanceController extends Controller
 {
@@ -21,7 +25,7 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
-        $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->get();
+        $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->get()->toArray();
         if (empty($registeredAttendance)) {
             $attendance = Attendance::create([
                 'status_id' => 1,
@@ -40,7 +44,7 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
-        $manager = $user->manager; //needed to send the notification
+        $manager = $user->manager_id; //needed to send the notification
         $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->first();
         if (empty($registeredAttendance)) {
             return json_encode(['success' => false, 'message' => 'you did not register you attendance at the begining of the day!']);
@@ -50,7 +54,16 @@ class AttendanceController extends Controller
             $registeredAttendance->working_to = date("H:i");
             $registeredAttendance->save();
             //here we send a notification to the manager!!!
-
+            $expo = new Expo();
+            $message = (new ExpoMessage())
+                ->setTitle('Attendance Record')
+                ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
+                ->setData(['id' => 1])
+                ->setChannelId('default')
+                ->setBadge(0)
+                ->playSound();
+            $recipient = NotificationToken::where('user_id', '=', $manager)->first();
+            $expo->send($message)->to($recipient->ExpoToken)->push();
             return json_encode(['success' => true, 'message' => 'attendance record is finalized, it will be sent to your manger for approval', 'attendance' => $registeredAttendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already finalized', 'attendance' => $registeredAttendance]);
@@ -64,8 +77,18 @@ class AttendanceController extends Controller
             //update the time when he finishes his work and the status in order to send a message to the manager to approve it 
             $registeredAttendance->status_id = 3;
             $registeredAttendance->save();
+            $user = User::where('id', $registeredAttendance->user_id)->first();
             //here we send a notification to the user and the HR to approve it too!!!
-
+            // $expo = new Expo();
+            // $message = (new ExpoMessage())
+            //     ->setTitle('Attendance Record')
+            //     ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
+            //     ->setData(['id' => 1])
+            //     ->setChannelId('default')
+            //     ->setBadge(0)
+            //     ->playSound();
+            // $recipient = NotificationToken::where('user_id', '=', $manager)->first();
+            // $expo->send($message)->to($recipient->ExpoToken)->push();
             return json_encode(['success' => true, 'message' => 'attendance record is approved by the manager, it will be sent to HR for approval', 'attendance' => $registeredAttendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already approved', 'attendance' => $registeredAttendance]);

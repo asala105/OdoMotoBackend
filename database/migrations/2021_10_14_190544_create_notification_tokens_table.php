@@ -14,7 +14,7 @@ class CreateNotificationTokensTable extends Migration
     public function up()
     {
         Schema::create('notification_tokens', function (Blueprint $table) {
-            $table->increment('id');
+            $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->string('ExpoToken');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
