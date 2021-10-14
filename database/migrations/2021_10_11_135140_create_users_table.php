@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_nb');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('first_login')->default(1);
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('set null');

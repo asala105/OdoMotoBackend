@@ -4,8 +4,112 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ba90dafa987b45ddc1829f1115871ce",
+    "content-hash": "72538d50234e73696d4837ca09868f95",
     "packages": [
+        {
+            "name": "alymosul/exponent-server-sdk-php",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Alymosul/exponent-server-sdk-php.git",
+                "reference": "81e263c5f0b306f19da4acea7aa217b796626fff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Alymosul/exponent-server-sdk-php/zipball/81e263c5f0b306f19da4acea7aa217b796626fff",
+                "reference": "81e263c5f0b306f19da4acea7aa217b796626fff",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ExponentPhpSDK\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aly Suleiman",
+                    "email": "alymosul@gmail.com"
+                }
+            ],
+            "description": "Server-side library for working with Expo push notifications using PHP",
+            "keywords": [
+                "expo",
+                "exponent",
+                "notifications",
+                "push"
+            ],
+            "support": {
+                "issues": "https://github.com/Alymosul/exponent-server-sdk-php/issues",
+                "source": "https://github.com/Alymosul/exponent-server-sdk-php/tree/1.3.0"
+            },
+            "time": "2021-06-22T13:15:22+00:00"
+        },
+        {
+            "name": "alymosul/laravel-exponent-push-notifications",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Alymosul/laravel-exponent-push-notifications.git",
+                "reference": "10ed7ba80ad20f3bb5c943e6999db3037915a9e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Alymosul/laravel-exponent-push-notifications/zipball/10ed7ba80ad20f3bb5c943e6999db3037915a9e0",
+                "reference": "10ed7ba80ad20f3bb5c943e6999db3037915a9e0",
+                "shasum": ""
+            },
+            "require": {
+                "alymosul/exponent-server-sdk-php": "1.3.*",
+                "laravel/framework": "^5.6 | ^6.0 | ^7.0 | ^8.0",
+                "php": "^7.1.3|^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.5||^1.0",
+                "orchestra/testbench": "~3.3||~4.0||^6.0",
+                "phpunit/phpunit": "~5.4||~5.7||~6.0||^7.0||^8.0||^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NotificationChannels\\ExpoPushNotifications\\ExpoPushNotificationsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NotificationChannels\\ExpoPushNotifications\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aly Suleiman",
+                    "email": "alymosul@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Exponent push notifications driver for laravel",
+            "homepage": "https://github.com/alymosul/laravel-exponent-push-notifications",
+            "support": {
+                "issues": "https://github.com/Alymosul/laravel-exponent-push-notifications/issues",
+                "source": "https://github.com/Alymosul/laravel-exponent-push-notifications/tree/v2.4.0"
+            },
+            "time": "2021-09-09T10:20:41+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.0.3",
@@ -121,6 +225,57 @@
                 }
             ],
             "time": "2021-08-15T20:50:18+00:00"
+        },
+        {
+            "name": "ctwillie/expo-server-sdk-php",
+            "version": "v1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ctwillie/expo-server-sdk-php.git",
+                "reference": "0f0a6210b40be533719a04b57155003ba8e93702"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ctwillie/expo-server-sdk-php/zipball/0f0a6210b40be533719a04b57155003ba8e93702",
+                "reference": "0f0a6210b40be533719a04b57155003ba8e93702",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.3",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ExpoSDK\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cedric Twillie",
+                    "email": "ctwillie77@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Server-side library for working with Expo using PHP",
+            "homepage": "https://github.com/ctwillie/expo-server-sdk-php",
+            "keywords": [
+                "expo",
+                "expo-server-sdk-php",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/ctwillie/expo-server-sdk-php/issues",
+                "source": "https://github.com/ctwillie/expo-server-sdk-php"
+            },
+            "time": "2021-09-06T15:04:42+00:00"
         },
         {
             "name": "dflydev/dot-access-data",

@@ -73,9 +73,8 @@ class VehicleController extends Controller
         //
     }
 
-    public function update(Request $request, Vehicle $vehicle)
+    public function update(Request $request, $id)
     {
-        //
     }
 
     public function destroy(Vehicle $vehicle)
