@@ -43,5 +43,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         /* *********** routes for vehicles and fuel controller: admin APIs *********** */
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
+        Route::post('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
     });
 });

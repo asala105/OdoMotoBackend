@@ -44,6 +44,15 @@ class DatabaseSeeder extends Seeder
         DB::table('statuses')->insert([
             'status' => 'rejected',
         ]);
+        DB::table('statuses')->insert([
+            'status' => 'done',
+        ]);
+        DB::table('statuses')->insert([
+            'status' => 'in progress',
+        ]);
+        DB::table('statuses')->insert([
+            'status' => 'dismised!',
+        ]);
         DB::table('organizations')->insert([
             'name' => 'organization1',
         ]);

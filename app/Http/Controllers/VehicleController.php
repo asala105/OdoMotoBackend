@@ -55,7 +55,6 @@ class VehicleController extends Controller
             'driver_license_requirements' => $request->driver_license_requirements,
         ]);
 
-        //User created, return success response
         return response()->json([
             'success' => true,
             'message' => 'Vehicle added successfully',
@@ -63,9 +62,17 @@ class VehicleController extends Controller
         ], 201);
     }
 
-    public function show(Vehicle $vehicle)
+    public function viewVehiclesInfo()
     {
-        //
+        $vehicles = Vehicle::all();
+        foreach ($vehicles as $vehicle) {
+            $vehicle->driver;
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Vehicle retrieved successfully',
+            'data' => $vehicles
+        ], 201);
     }
 
     public function edit(Vehicle $vehicle)

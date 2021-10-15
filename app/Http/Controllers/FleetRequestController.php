@@ -72,8 +72,13 @@ class FleetRequestController extends Controller
         ]);
     }
 
-    public function destroy(FleetRequest $fleetRequest)
+    public function cancelRequest($id)
     {
-        //
+        $fleet = FleetRequest::where('id', $id)->delete();
+        return json_encode([
+            'success' => true,
+            'message' => 'Fleet request is canceled',
+            'fleet' => $fleet
+        ]);
     }
 }
