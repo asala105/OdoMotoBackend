@@ -14,8 +14,10 @@ class CreateInspectionsFormsTable extends Migration
     public function up()
     {
         Schema::create('inspection_forms', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->unsignedInteger('inspection_schedule_id')->nullable();
             $table->timestamps();
+            $table->foreign('inspection_schedule_id')->references('id')->on('inspection_schedules');
         });
     }
 

@@ -17,7 +17,7 @@ class CreateInspectionSchedulesTable extends Migration
             $table->increments('id');
             $table->date('date');
             $table->unsignedInteger('status_id')->nullable();
-            $table->boolean('inspection_type');
+            $table->boolean('inspection_type'); //0 for safety inspection (requires a form) 1 for maintenance 
             $table->timestamps();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
         });

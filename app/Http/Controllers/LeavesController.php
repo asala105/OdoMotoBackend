@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leaves;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
@@ -14,11 +15,11 @@ use App\Models\NotificationToken;
 class LeavesController extends Controller
 {
     /* *********** User APIs *********** */
-    public function getLeavesRecord()
+    public function getLeavesRecord($status_id)
     {
         $user = Auth::user();
         $userId = $user->id;
-        $leavesRecord = Leaves::where('user_id', $userId)->where('status_id', 4)->orderByDesc('date')->get();
+        $leavesRecord = Leaves::where('user_id', $userId)->where('status_id', $status_id)->orderByDesc('date')->get();
         return json_encode(['success' => true, 'message' => 'leaves record successfully retrieved', 'attendance' => $leavesRecord]);
     }
     public function request(Request $request)
@@ -43,6 +44,11 @@ class LeavesController extends Controller
         ]);
         $manager = $user->manager_id;
         $recipient = NotificationToken::where('user_id', '=', $manager)->pluck('ExpoToken')->all();
+        $notification = Notification::create([
+            'user_id' => $manager,
+            'title' => 'Leave Request',
+            'body' => $user->first_name . ' ' . $user->last_name . ' requested a leave.'
+        ]);
         if (!empty($recipient)) {
             $expo = new Expo();
             $message = (new ExpoMessage())
@@ -59,7 +65,6 @@ class LeavesController extends Controller
             'message' => 'Leave request is created, it will be sent to your manager for approval',
             'LeaveRequest' => $LeaveRequest
         ]);
-        //we still need to add notification and email notification to the manager
     }
 
 
@@ -75,6 +80,13 @@ class LeavesController extends Controller
             $HR = User::where('user_type_id', 2)->pluck('id');
             $user = User::where('id', $LeaveRequest->user_id)->first();
             $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
+            foreach ($HR as $id) {
+                $notification = Notification::create([
+                    'user_id' => $id,
+                    'title' => 'Leave Request',
+                    'body' => $user->first_name . ' ' . $user->last_name . ' has requested a leave.'
+                ]);
+            }
             if (!empty($recipients)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())
@@ -104,6 +116,13 @@ class LeavesController extends Controller
             $HR = User::where('user_type_id', 2)->pluck('id');
             $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
             $expo = new Expo();
+            foreach ($HR as $id) {
+                $notification = Notification::create([
+                    'user_id' => $id,
+                    'title' => 'Leave Request',
+                    'body' => $user->first_name . ' ' . $user->last_name . "'s leave request was rejected."
+                ]);
+            }
             if (!empty($recipients)) {
                 $message1 = (new ExpoMessage())
                     ->setTitle('Attendance Record')
@@ -115,6 +134,11 @@ class LeavesController extends Controller
                 $expo->send($message1)->to($recipients)->push();
             }
             $recipient = NotificationToken::where('user_id', $user->id)->pluck('ExpoToken')->all();
+            $notification = Notification::create([
+                'user_id' => $user->id,
+                'title' => 'Leave Request',
+                'body' => 'Your leave request was rejected.'
+            ]);
             if ($recipient) {
                 $message2 = (new ExpoMessage())
                     ->setTitle('Attendance Record')
@@ -140,6 +164,11 @@ class LeavesController extends Controller
             $LeaveRequest->save();
             //here we send a notification to the user!!!
             $recipients = NotificationToken::where('user_id', $LeaveRequest->user_id)->pluck('ExpoToken')->all();
+            $notification = Notification::create([
+                'user_id' => $LeaveRequest->user_id,
+                'title' => 'Leave Request',
+                'body' => 'Your leave request was accepted.'
+            ]);
             if (!empty($recipients)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())

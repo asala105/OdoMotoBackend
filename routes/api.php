@@ -9,23 +9,34 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FleetRequestController;
+use App\Http\Controllers\InspectionController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('register_organization', [OrganizationController::class, 'store']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
+    //on first login the frontend sends the expo token to the backend where it is stored in the db
     Route::post('register_for_notifications', [NotificationsController::class, 'registerToken']);
+
     Route::get('user_profile', [AuthController::class, 'userProfile']);
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
     Route::post('add_destination/{id}', [FleetRequestController::class, 'addDestination']);
+
     Route::post('leave_request', [LeavesController::class, 'request']);
+    Route::get('get_leaves_record/{status_id}', [LeavesController::class, 'getLeavesRecord']);
 
     Route::get('register_attendance', [AttendanceController::class, 'register']);
     Route::get('finalize_attendance', [AttendanceController::class, 'finalize']);
     Route::get('get_attendance_record', [AttendanceController::class, 'getAttendanceRecord']);
+
+    Route::post('add_inspection_task', [InspectionController::class, 'addInspectionTask']);
+    Route::get('get_inspection_task/{year}/{month}', [InspectionController::class, 'getInspection']);
+
+    Route::get('get_notifications', [NotificationsController::class, 'getNotifications']);
+    //to add Notification controller routes, Vehicle controller routes, + testing them and the inspection controller
 
     Route::group(['middleware' => ['admin']], function () {
         /* *********** routes for attendance controller: admin APIs *********** */

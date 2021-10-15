@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NotificationToken;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -23,13 +24,26 @@ class NotificationsController extends Controller
         return json_encode(['success' => true, 'message' => 'token successfully added', 'token' => $token]);
     }
 
-    public function update(Request $request, FleetRequest $fleetRequest)
+    public function getNotifications()
     {
-        //
+        $notifications = Notification::all()->orderByDesc('is_read')->orderByDesc('created_at')->toArray();
+        return json_encode([
+            'success' => true,
+            'message' => 'notifications retrieved successfully',
+            'notifications' => $notifications
+        ]);
     }
 
-    public function destroy(FleetRequest $fleetRequest)
+    public function markRead($id)
     {
-        //
+        $notifications = Notification::where('id', $id)->first();
+        $notifications->update([
+            'is_read' => 1
+        ]);
+        return json_encode([
+            'success' => true,
+            'message' => 'notifications updated successfully',
+            'notifications' => $notifications
+        ]);
     }
 }

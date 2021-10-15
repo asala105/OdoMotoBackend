@@ -9,6 +9,7 @@ use Auth;
 use ExpoSDK\ExpoMessage;
 use ExpoSDK\Expo;
 use App\Models\NotificationToken;
+use App\Models\Notification;
 
 class AttendanceController extends Controller
 {
@@ -55,11 +56,16 @@ class AttendanceController extends Controller
             $registeredAttendance->save();
             //here we send a notification to the manager!!!
             $recipient = NotificationToken::where('user_id', '=', $manager)->pluck('ExpoToken')->all();
+            $notification = Notification::create([
+                'user_id' => $manager,
+                'title' => 'Attendance Record',
+                'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.'
+            ]);
             if (!empty($recipient)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())
                     ->setTitle('Attendance Record')
-                    ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
+                    ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance.')
                     ->setData(['id' => 1])
                     ->setChannelId('default')
                     ->setBadge(0)
@@ -83,11 +89,18 @@ class AttendanceController extends Controller
             //here we send a notification to the HR to approve it too!!!
             $HR = User::where('user_type_id', 2)->pluck('id');
             $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
+            foreach ($HR as $id) {
+                $notification = Notification::create([
+                    'user_id' => $id,
+                    'title' => 'Attendance Record',
+                    'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.'
+                ]);
+            }
             if (!empty($recipients)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())
                     ->setTitle('Attendance Record')
-                    ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
+                    ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance.')
                     ->setData(['id' => 1])
                     ->setChannelId('default')
                     ->setBadge(0)
@@ -112,11 +125,18 @@ class AttendanceController extends Controller
             //here we send a notification to the HR and the user!!!
             $HR = User::where('user_type_id', 2)->pluck('id');
             $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
+            foreach ($HR as $id) {
+                $notification = Notification::create([
+                    'user_id' => $id,
+                    'title' => 'Attendance Record',
+                    'body' => $user->first_name . ' ' . $user->last_name . "'s attendance was rejected."
+                ]);
+            }
             $expo = new Expo();
             if (!empty($recipients)) {
                 $message1 = (new ExpoMessage())
                     ->setTitle('Attendance Record')
-                    ->setBody($user->first_name . ' ' . $user->last_name . "'s attendance was rejected. Click to see the attendance record.")
+                    ->setBody($user->first_name . ' ' . $user->last_name . "'s attendance was rejected.")
                     ->setData(['id' => 1])
                     ->setChannelId('default')
                     ->setBadge(0)
@@ -124,10 +144,15 @@ class AttendanceController extends Controller
                 $expo->send($message1)->to($recipients)->push();
             }
             $recipient = NotificationToken::where('user_id', $user->id)->pluck('ExpoToken')->all();
+            $notification = Notification::create([
+                'user_id' => $user->id,
+                'title' => 'Attendance Record',
+                'body' => 'Your attendance was rejected.'
+            ]);
             if ($recipient) {
                 $message2 = (new ExpoMessage())
                     ->setTitle('Attendance Record')
-                    ->setBody("Your attendance was rejected. Click to see the attendance record.")
+                    ->setBody("Your attendance was rejected.")
                     ->setData(['id' => 1])
                     ->setChannelId('default')
                     ->setBadge(0)
@@ -149,11 +174,16 @@ class AttendanceController extends Controller
             $registeredAttendance->save();
             //here we send a notification to the user!!!
             $recipients = NotificationToken::where('user_id', $registeredAttendance->user_id)->pluck('ExpoToken')->all();
+            $notification = Notification::create([
+                'user_id' => $registeredAttendance->user_id,
+                'title' => 'Attendance Record',
+                'body' => 'Your attendance was accepted.'
+            ]);
             if (!empty($recipients)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())
                     ->setTitle('Attendance Record')
-                    ->setBody('Your attendance was approved. Click to see the attendance record.')
+                    ->setBody('Your attendance was approved.')
                     ->setData(['id' => 1])
                     ->setChannelId('default')
                     ->setBadge(0)

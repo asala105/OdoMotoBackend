@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class inspectionSchedule extends Model
+class InspectionSchedule extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'status_id', 'inspection_type', 'date'
+    ];
 }
