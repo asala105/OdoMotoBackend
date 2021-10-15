@@ -8,6 +8,7 @@ use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\FleetRequestController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
@@ -18,6 +19,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('user_profile', [AuthController::class, 'userProfile']);
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
+    Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
+    Route::post('add_destination/{id}', [FleetRequestController::class, 'addDestination']);
     Route::post('leave_request', [LeavesController::class, 'request']);
 
     Route::get('register_attendance', [AttendanceController::class, 'register']);
@@ -37,6 +40,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('leaves_records', [LeavesController::class, 'getLeavesRecordPerUser']);
         Route::get('approve_leave_hr/{id}', [LeavesController::class, 'approveByHR']);
 
+        /* *********** routes for vehicles and fuel controller: admin APIs *********** */
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
     });

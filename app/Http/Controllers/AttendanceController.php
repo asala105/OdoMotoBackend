@@ -54,16 +54,18 @@ class AttendanceController extends Controller
             $registeredAttendance->working_to = date("H:i");
             $registeredAttendance->save();
             //here we send a notification to the manager!!!
-            $expo = new Expo();
-            $message = (new ExpoMessage())
-                ->setTitle('Attendance Record')
-                ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
-                ->setData(['id' => 1])
-                ->setChannelId('default')
-                ->setBadge(0)
-                ->playSound();
-            $recipient = NotificationToken::where('user_id', '=', $manager)->first();
-            $expo->send($message)->to($recipient->ExpoToken)->push();
+            $recipient = NotificationToken::where('user_id', '=', $manager)->pluck('ExpoToken')->all();
+            if (!empty($recipient)) {
+                $expo = new Expo();
+                $message = (new ExpoMessage())
+                    ->setTitle('Attendance Record')
+                    ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message)->to($recipient)->push();
+            }
             return json_encode(['success' => true, 'message' => 'attendance record is finalized, it will be sent to your manger for approval', 'attendance' => $registeredAttendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already finalized', 'attendance' => $registeredAttendance]);
@@ -78,18 +80,22 @@ class AttendanceController extends Controller
             $registeredAttendance->status_id = 3;
             $registeredAttendance->save();
             $user = User::where('id', $registeredAttendance->user_id)->first();
-            //here we send a notification to the user and the HR to approve it too!!!
-            // $expo = new Expo();
-            // $message = (new ExpoMessage())
-            //     ->setTitle('Attendance Record')
-            //     ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
-            //     ->setData(['id' => 1])
-            //     ->setChannelId('default')
-            //     ->setBadge(0)
-            //     ->playSound();
-            // $recipient = NotificationToken::where('user_id', '=', $manager)->first();
-            // $expo->send($message)->to($recipient->ExpoToken)->push();
+            //here we send a notification to the HR to approve it too!!!
+            $HR = User::where('user_type_id', 2)->pluck('id');
+            $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
+            if (!empty($recipients)) {
+                $expo = new Expo();
+                $message = (new ExpoMessage())
+                    ->setTitle('Attendance Record')
+                    ->setBody($user->first_name . ' ' . $user->last_name . ' registered attendance. Click to see the attendance record.')
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message)->to($recipients)->push();
+            }
             return json_encode(['success' => true, 'message' => 'attendance record is approved by the manager, it will be sent to HR for approval', 'attendance' => $registeredAttendance]);
+            //return json_encode(['success' => true, 'message' => 'attendance record is approved by the manager, it will be sent to HR for approval', 'attendance' => $recipients]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already approved', 'attendance' => $registeredAttendance]);
         }
@@ -102,8 +108,32 @@ class AttendanceController extends Controller
             //update the time when he finishes his work and the status in order to send a message to the manager to approve it 
             $registeredAttendance->status_id = 5;
             $registeredAttendance->save();
-            //here we send a notification to the user and the HR to approve it too!!!
-
+            $user = User::where('id', $registeredAttendance->user_id)->first();
+            //here we send a notification to the HR and the user!!!
+            $HR = User::where('user_type_id', 2)->pluck('id');
+            $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
+            $expo = new Expo();
+            if (!empty($recipients)) {
+                $message1 = (new ExpoMessage())
+                    ->setTitle('Attendance Record')
+                    ->setBody($user->first_name . ' ' . $user->last_name . "'s attendance was rejected. Click to see the attendance record.")
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message1)->to($recipients)->push();
+            }
+            $recipient = NotificationToken::where('user_id', $user->id)->pluck('ExpoToken')->all();
+            if ($recipient) {
+                $message2 = (new ExpoMessage())
+                    ->setTitle('Attendance Record')
+                    ->setBody("Your attendance was rejected. Click to see the attendance record.")
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message2)->to($recipient)->push();
+            }
             return json_encode(['success' => true, 'message' => 'attendance record is rejected by the manager', 'attendance' => $registeredAttendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already approved', 'attendance' => $registeredAttendance]);
@@ -114,11 +144,22 @@ class AttendanceController extends Controller
     {
         $registeredAttendance = Attendance::where('id', $id)->where('status_id', 3)->first();
         if (!empty($registeredAttendance)) {
-            //update the time when he finishes his work and the status in order to send a message to the manager to approve it 
+            //update the status in order to "approved" 
             $registeredAttendance->status_id = 4;
             $registeredAttendance->save();
             //here we send a notification to the user!!!
-
+            $recipients = NotificationToken::where('user_id', $registeredAttendance->user_id)->pluck('ExpoToken')->all();
+            if (!empty($recipients)) {
+                $expo = new Expo();
+                $message = (new ExpoMessage())
+                    ->setTitle('Attendance Record')
+                    ->setBody('Your attendance was approved. Click to see the attendance record.')
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message)->to($recipients)->push();
+            }
             return json_encode(['success' => true, 'message' => 'attendance record is approved', 'attendance' => $registeredAttendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already approved', 'attendance' => $registeredAttendance]);

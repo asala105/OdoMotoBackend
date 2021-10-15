@@ -3,81 +3,75 @@
 namespace App\Http\Controllers;
 
 use App\Models\FleetRequest;
+use App\Models\Destination;
 use Illuminate\Http\Request;
+use Auth;
+use Illuminate\Support\Facades\Validator;
+use ExpoSDK\ExpoMessage;
+use ExpoSDK\Expo;
+use App\Models\NotificationToken;
 
 class FleetRequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    /* ************** Users APIs:*************** */
+    public function fleetRequest(Request $request)
     {
-        //
+        $user = Auth::user();
+        $depId = $user->department->id;
+        $validator = Validator::make($request->all(), [
+            'date' => 'required|date|after:today|date_format:Y-m-d',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'purpose' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        $FleetRequest = FleetRequest::create([
+            'department_id' => $depId,
+            'date' => $request->date,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'purpose' => $request->purpose,
+        ]);
+        return json_encode([
+            'success' => true,
+            'message' => 'Fleet request is created, you will be notified with the drivers name before the date of the request',
+            'Fleet' => $FleetRequest
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\FleetRequest  $fleetRequest
-     * @return \Illuminate\Http\Response
-     */
     public function show(FleetRequest $fleetRequest)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\FleetRequest  $fleetRequest
-     * @return \Illuminate\Http\Response
-     */
     public function edit(FleetRequest $fleetRequest)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\FleetRequest  $fleetRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, FleetRequest $fleetRequest)
+    public function addDestination(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'location_from' => 'required|string',
+            'location_to' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        $destination = Destination::create([
+            'fleet_request_id' => $id,
+            'location_from' => $request->location_from,
+            'location_to' => $request->location_to,
+        ]);
+        return json_encode([
+            'success' => true,
+            'message' => 'Destination is added to the fleet request, you will be notified with the drivers name before the date of the request',
+            'destination' => $destination
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\FleetRequest  $fleetRequest
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(FleetRequest $fleetRequest)
     {
         //

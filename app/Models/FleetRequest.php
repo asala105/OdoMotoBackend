@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class FleetRequest extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'department_id',
+        'date',
+        'start_time',
+        'end_time',
+        'purpose'
+    ];
 }

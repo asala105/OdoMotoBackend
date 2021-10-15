@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leaves;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Validator;
+use ExpoSDK\ExpoMessage;
+use ExpoSDK\Expo;
+use App\Models\NotificationToken;
 
 class LeavesController extends Controller
 {
@@ -29,7 +33,7 @@ class LeavesController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-        $organization = Leaves::create([
+        $LeaveRequest = Leaves::create([
             'status_id' => 2,
             'user_id' => $userId,
             'leave_from_date' => $request->leave_from_date,
@@ -37,10 +41,23 @@ class LeavesController extends Controller
             'leave_type' => $request->leave_type,
             'details' => $request->details,
         ]);
+        $manager = $user->manager_id;
+        $recipient = NotificationToken::where('user_id', '=', $manager)->pluck('ExpoToken')->all();
+        if (!empty($recipient)) {
+            $expo = new Expo();
+            $message = (new ExpoMessage())
+                ->setTitle('Leave Request')
+                ->setBody($user->first_name . ' ' . $user->last_name . ' requested a leave.')
+                ->setData(['id' => 1])
+                ->setChannelId('default')
+                ->setBadge(0)
+                ->playSound();
+            $expo->send($message)->to($recipient)->push();
+        }
         return json_encode([
             'success' => true,
             'message' => 'Leave request is created, it will be sent to your manager for approval',
-            'organization' => $organization
+            'LeaveRequest' => $LeaveRequest
         ]);
         //we still need to add notification and email notification to the manager
     }
@@ -54,8 +71,21 @@ class LeavesController extends Controller
             //update the status in order to send a message to the HR to approve it 
             $LeaveRequest->status_id = 3;
             $LeaveRequest->save();
-            //here we send a notification to the HR to approve it!!!
-
+            //here we send a notification to the HR to approve it too!!!
+            $HR = User::where('user_type_id', 2)->pluck('id');
+            $user = User::where('id', $LeaveRequest->user_id)->first();
+            $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
+            if (!empty($recipients)) {
+                $expo = new Expo();
+                $message = (new ExpoMessage())
+                    ->setTitle('Leave Request')
+                    ->setBody($user->first_name . ' ' . $user->last_name . ' has requested a leave.')
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message)->to($recipients)->push();
+            }
             return json_encode(['success' => true, 'message' => 'Leave request is approved by the manager, it will be sent to HR for approval', 'Leaves' => $LeaveRequest]);
         } else {
             return json_encode(['success' => false, 'message' => 'Leave request is already approved', 'Leaves' => $LeaveRequest]);
@@ -69,8 +99,32 @@ class LeavesController extends Controller
             //update the status in order to send a message to the HR to approve it 
             $LeaveRequest->status_id = 5;
             $LeaveRequest->save();
-            //here we send a notification to the HR to approve it!!!
-
+            $user = User::where('id', $LeaveRequest->user_id)->first();
+            //here we send a notification to the HR and the user!!!
+            $HR = User::where('user_type_id', 2)->pluck('id');
+            $recipients = NotificationToken::whereIn('user_id', $HR)->pluck('ExpoToken')->all();
+            $expo = new Expo();
+            if (!empty($recipients)) {
+                $message1 = (new ExpoMessage())
+                    ->setTitle('Attendance Record')
+                    ->setBody($user->first_name . ' ' . $user->last_name . "'s leave request was rejected.")
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message1)->to($recipients)->push();
+            }
+            $recipient = NotificationToken::where('user_id', $user->id)->pluck('ExpoToken')->all();
+            if ($recipient) {
+                $message2 = (new ExpoMessage())
+                    ->setTitle('Attendance Record')
+                    ->setBody("Your leave request was rejected.")
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message2)->to($recipient)->push();
+            }
             return json_encode(['success' => true, 'message' => 'Leave request is reject by the manager', 'Leaves' => $LeaveRequest]);
         } else {
             return json_encode(['success' => false, 'message' => 'Leave request is already approved', 'Leaves' => $LeaveRequest]);
@@ -85,7 +139,18 @@ class LeavesController extends Controller
             $LeaveRequest->status_id = 4;
             $LeaveRequest->save();
             //here we send a notification to the user!!!
-
+            $recipients = NotificationToken::where('user_id', $LeaveRequest->user_id)->pluck('ExpoToken')->all();
+            if (!empty($recipients)) {
+                $expo = new Expo();
+                $message = (new ExpoMessage())
+                    ->setTitle('Leave Request')
+                    ->setBody('Your leave request was approved.')
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message)->to($recipients)->push();
+            }
             return json_encode(['success' => true, 'message' => 'Leave request is approved', 'Leaves' => $LeaveRequest]);
         } else {
             return json_encode(['success' => false, 'message' => 'Leave request is already approved', 'Leaves' => $LeaveRequest]);

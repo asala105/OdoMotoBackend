@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Destination extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'fleet_request_id',
+        'location_from',
+        'location_to'
+    ];
 }
