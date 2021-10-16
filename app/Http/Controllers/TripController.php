@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\IncidentReport;
+use App\Models\FuelOdometerPerTrip;
 use Illuminate\Http\Request;
 
-class IncidentReportController extends Controller
+class TripController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class IncidentReportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\IncidentReport  $incidentReport
+     * @param  \App\Models\FuelOdometerPerTrip  $fuelOdometerPerTrip
      * @return \Illuminate\Http\Response
      */
-    public function show(IncidentReport $incidentReport)
+    public function show(FuelOdometerPerTrip $fuelOdometerPerTrip)
     {
         //
     }
@@ -52,10 +52,10 @@ class IncidentReportController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\IncidentReport  $incidentReport
+     * @param  \App\Models\FuelOdometerPerTrip  $fuelOdometerPerTrip
      * @return \Illuminate\Http\Response
      */
-    public function edit(IncidentReport $incidentReport)
+    public function edit(FuelOdometerPerTrip $fuelOdometerPerTrip)
     {
         //
     }
@@ -64,10 +64,10 @@ class IncidentReportController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\IncidentReport  $incidentReport
+     * @param  \App\Models\FuelOdometerPerTrip  $fuelOdometerPerTrip
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, IncidentReport $incidentReport)
+    public function update(Request $request, FuelOdometerPerTrip $fuelOdometerPerTrip)
     {
         //
     }
@@ -75,10 +75,10 @@ class IncidentReportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\IncidentReport  $incidentReport
+     * @param  \App\Models\FuelOdometerPerTrip  $fuelOdometerPerTrip
      * @return \Illuminate\Http\Response
      */
-    public function destroy(IncidentReport $incidentReport)
+    public function destroy(FuelOdometerPerTrip $fuelOdometerPerTrip)
     {
         //
     }

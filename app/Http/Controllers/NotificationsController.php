@@ -26,7 +26,7 @@ class NotificationsController extends Controller
 
     public function getNotifications()
     {
-        $notifications = Notification::all()->orderByDesc('is_read')->orderByDesc('created_at')->toArray();
+        $notifications = Notification::all()->orderByDesc('created_at')->orderByDesc('is_read')->toArray();
         return json_encode([
             'success' => true,
             'message' => 'notifications retrieved successfully',

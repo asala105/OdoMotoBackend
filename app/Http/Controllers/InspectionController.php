@@ -54,14 +54,13 @@ class InspectionController extends Controller
         ]);
     }
 
-
-    public function update(Request $request, inspectionSchedule $inspectionSchedule)
+    public function deleteTask($id)
     {
-        //
-    }
-
-    public function destroy(inspectionSchedule $inspectionSchedule)
-    {
-        //
+        $task = InspectionSchedule::where('id', $id)->delete();
+        return json_encode([
+            'success' => true,
+            'message' => 'Inspection Task is canceled',
+            'task' => $task
+        ]);
     }
 }
