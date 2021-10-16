@@ -63,6 +63,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(User::class, 'manager_id', 'id');
     }
 
+    public function vehicle()
+    {
+        return $this->hasOne(Vehicle::class, 'driver_id', 'id');
+    }
     public function employees()
     {
         return $this->hasMany(User::class, 'manager_id', 'id');

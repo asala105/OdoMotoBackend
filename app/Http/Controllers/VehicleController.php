@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FleetRequest;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class VehicleController extends Controller
@@ -129,8 +131,12 @@ class VehicleController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function recordFuelAndOdometer(Request $request, $id)
     {
+        $user = Auth::user();
+        $vehicle = $user->vehicle;
+        $todaysMovement = FleetRequest::where('vehicle_id', $vehicle->id)->where('date', date('y-m-d'))->first();
+        return ($todaysMovement);
     }
 
     public function destroy(Vehicle $vehicle)

@@ -34,6 +34,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::post('add_inspection_task', [InspectionController::class, 'addInspectionTask']);
     Route::get('get_inspection_task/{year}/{month}', [InspectionController::class, 'getInspection']);
+    Route::get('add_trip_fuel_odometer', [VehicleController::class, 'recordFuelAndOdometer']);
 
     Route::get('get_notifications', [NotificationsController::class, 'getNotifications']);
     //to add Notification controller routes, Vehicle controller routes, + testing them and the inspection controller
