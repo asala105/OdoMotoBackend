@@ -9,6 +9,6 @@ class InspectionSchedule extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'status_id', 'inspection_type', 'date'
+        'status_id', 'inspection_type', 'date', 'driver_id', 'vehicle_id'
     ];
 }

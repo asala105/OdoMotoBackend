@@ -32,8 +32,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('finalize_attendance', [AttendanceController::class, 'finalize']);
     Route::get('get_attendance_record', [AttendanceController::class, 'getAttendanceRecord']);
 
-    Route::post('add_inspection_task', [InspectionController::class, 'addInspectionTask']);
-    Route::get('get_inspection_task/{year}/{month}', [InspectionController::class, 'getInspection']);
+
+    Route::get('get_tasks/{year}/{month}', [InspectionController::class, 'getInspection']);
+
     Route::get('add_trip_fuel_odometer', [VehicleController::class, 'recordFuelAndOdometer']);
 
     Route::get('get_notifications', [NotificationsController::class, 'getNotifications']);
@@ -58,5 +59,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
         Route::post('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
+
+        /* *********** routes for Inspection controller: admin APIs *********** */
+        Route::post('add_inspection_task', [InspectionController::class, 'addInspectionTask']);
+        Route::get('delete_inspection_task/{id}', [InspectionController::class, 'deleteTask']);
+        Route::get('get_inspection_task/{year}/{month}', [InspectionController::class, 'getInspection']);
     });
 });
