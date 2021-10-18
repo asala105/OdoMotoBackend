@@ -20,6 +20,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('register_for_notifications', [NotificationsController::class, 'registerToken']);
 
     Route::get('user_profile', [AuthController::class, 'userProfile']);
+    Route::post('reset_password', [AuthController::class, 'resetPass']);
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
@@ -53,7 +54,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('leaves_records', [LeavesController::class, 'getLeavesRecordPerUser']);
         Route::get('approve_leave_hr/{id}', [LeavesController::class, 'approveByHR']);
 
-        Route::get('auto_generate', [FleetRequestController::class, 'autoGenerate']);
+        // Route::get('auto_generate', [FleetRequestController::class, 'autoGenerate']);
 
         /* *********** routes for vehicles and fuel controller: admin APIs *********** */
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);

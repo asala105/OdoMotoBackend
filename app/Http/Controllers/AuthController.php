@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -70,11 +69,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -92,11 +86,6 @@ class AuthController extends Controller
         return $this->createNewToken($token);
     }
 
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function logout()
     {
         auth()->logout();
@@ -104,21 +93,11 @@ class AuthController extends Controller
         return response()->json(['message' => 'User successfully signed out']);
     }
 
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function refresh()
     {
         return $this->createNewToken(auth()->refresh());
     }
 
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function userProfile()
     {
         $user = auth()->user();
@@ -126,13 +105,6 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     protected function createNewToken($token)
     {
         return response()->json([
@@ -145,5 +117,23 @@ class AuthController extends Controller
 
     function resetPass(Request $request)
     {
+        if ($request->password === $request->confirm_pass) {
+            $u = Auth::user();
+            $user = User::where('id', $u->id)->first();
+            $user->password = bcrypt($request->password);
+            if ($user->first_login == 1) {
+                $user->first_login = 0;
+            }
+            $user->save();
+            return response()->json([
+                'success' => true,
+                'message' => 'Password successfully reset'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password and confirm password are not matched'
+            ]);
+        }
     }
 }
