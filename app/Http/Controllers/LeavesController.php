@@ -63,7 +63,8 @@ class LeavesController extends Controller
         return json_encode([
             'success' => true,
             'message' => 'Leave request is created, it will be sent to your manager for approval',
-            'LeaveRequest' => $LeaveRequest
+            'LeaveRequest' => $LeaveRequest,
+            'recipient' => $expo
         ]);
     }
 
