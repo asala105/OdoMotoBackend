@@ -10,10 +10,13 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FleetRequestController;
 use App\Http\Controllers\InspectionController;
+use App\Http\Controllers\DashboardController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('register_organization', [OrganizationController::class, 'store']);
+
+Route::post('test', [LeavesController::class, 'test']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     //on first login the frontend sends the expo token to the backend where it is stored in the db
@@ -42,6 +45,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     //to add Notification controller routes, Vehicle controller routes, + testing them and the inspection controller
 
     Route::group(['middleware' => ['admin']], function () {
+        Route::get('dashboard', [DashboardController::class, 'index']);
+
         /* *********** routes for attendance controller: admin APIs *********** */
         Route::get('approve_attendance/{id}', [AttendanceController::class, 'approveByManager']);
         Route::get('reject_attendance/{id}', [AttendanceController::class, 'rejectByManager']);
@@ -64,6 +69,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         /* *********** routes for Inspection controller: admin APIs *********** */
         Route::post('add_inspection_task', [InspectionController::class, 'addInspectionTask']);
         Route::get('delete_inspection_task/{id}', [InspectionController::class, 'deleteTask']);
-        Route::get('get_inspection_task/{year}/{month}', [InspectionController::class, 'getInspection']);
+        Route::get('get_inspection_task/{date}', [InspectionController::class, 'getInspection']);
     });
 });

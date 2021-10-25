@@ -11,4 +11,9 @@ class InspectionSchedule extends Model
     protected $fillable = [
         'status_id', 'inspection_type', 'date', 'driver_id', 'vehicle_id'
     ];
+
+    function vehicles()
+    {
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
+    }
 }
