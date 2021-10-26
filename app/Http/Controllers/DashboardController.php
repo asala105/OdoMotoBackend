@@ -31,8 +31,33 @@ class DashboardController extends Controller
 
         $number_of_inspection_tasks = InspectionSchedule::where('date', '=', $date)->count();
 
-        // $maintenance_freq = InspectionSchedule::where(DB::raw('YEAR(date)'), '=', date('y', strtotime('today')))->GroupBy('vehicle_id')->count);
+        $maintenance_freq = InspectionSchedule::select('vehicle_id', DB::raw('count(*) as counter'))
+            ->where('inspection_type', 1)
+            ->whereYEAR('date', date("Y-m-d", strtotime('today')))
+            ->GroupBy('vehicle_id')
+            ->get();
 
+        $MaintenanceChartLabels = [];
+        $MaintenanceChartData = [];
+        foreach ($maintenance_freq as $freq) {
+            $vehicle = $freq->vehicle;
+            $MaintenanceChartLabels[] = $vehicle->registration_code;
+            $MaintenanceChartData[] = $freq->counter;
+        }
+
+        $Leaves_freq = Leaves::select(DB::raw('count(*) as counter'), DB::raw('Month(leave_from_date) as month'), DB::raw('Year(leave_from_date) as year'))
+            ->where('status_id', 4)
+            ->whereYEAR('leave_from_date', date("Y-m-d", strtotime('today')))
+            ->GroupBy('month', 'year')
+            ->get();
+
+        $LeavesChartLabels = [];
+        $LeavesChartData = [];
+        // foreach ($Leaves_freq as $freq) {
+        //     $vehicle = $freq->vehicle;
+        //     $MaintenanceChartLabels[] = $vehicle->registration_code;
+        //     $MaintenanceChartData[] = $freq->counter;
+        // }
         return response()->json([
             'success' => true,
             'message' => 'data retrieved successfully',
@@ -43,8 +68,12 @@ class DashboardController extends Controller
                 ['title' => 'Inspection Tasks', 'value' => $number_of_inspection_tasks],
             ],
             'maintenance_chart' => [
-                //'ChartLabels' => $vehicles,
-                // 'ChartData' => $maintenance_freq,
+                'ChartLabels' => $MaintenanceChartLabels,
+                'ChartData' => $MaintenanceChartData,
+            ],
+            'leaves_chart' => [
+                'ChartLabels' => $Leaves_freq,
+                'ChartData' => $LeavesChartData,
             ]
         ], 201);
     }

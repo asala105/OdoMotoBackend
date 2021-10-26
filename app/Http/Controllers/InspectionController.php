@@ -10,9 +10,14 @@ use Illuminate\Support\Facades\Validator;
 class InspectionController extends Controller
 {
     /* *********************Admin side************************ */
-    public function getInspection($year, $month)
+    public function getInspection($date)
     {
-        $inspectionTasks = InspectionSchedule::whereYear('date', $year)->whereMonth('date', $month)->get()->toArray();
+        $inspectionTasks = InspectionSchedule::where('date', $date)->get();
+        foreach ($inspectionTasks as $task) {
+            $task->driver;
+            $task->vehicle;
+            $task->status;
+        }
         return json_encode([
             'success' => true,
             'message' => 'inspection tasks retrieved successfully',

@@ -139,8 +139,13 @@ class VehicleController extends Controller
         return ($todaysMovement);
     }
 
-    public function destroy(Vehicle $vehicle)
+    public function delete($id)
     {
-        //
+        $vehicle = Vehicle::where('id', $id)->delete();
+        return json_encode([
+            'success' => true,
+            'message' => 'Vehicle deleted',
+            'vehicle' => $vehicle
+        ]);
     }
 }

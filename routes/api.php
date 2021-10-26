@@ -11,21 +11,26 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FleetRequestController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\UsersController;
+//used
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
-Route::post('register_organization', [OrganizationController::class, 'store']);
 
-Route::post('test', [LeavesController::class, 'test']);
+//not yet
+Route::post('register_organization', [OrganizationController::class, 'store']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     //on first login the frontend sends the expo token to the backend where it is stored in the db
+    //used
     Route::post('register_for_notifications', [NotificationsController::class, 'registerToken']);
 
+    //not yet
     Route::get('user_profile', [AuthController::class, 'userProfile']);
-    Route::post('reset_password', [AuthController::class, 'resetPass']);
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    //used
+    Route::post('reset_password', [AuthController::class, 'resetPass']);
 
+    //not yet
     Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
     Route::post('add_destination/{id}', [FleetRequestController::class, 'addDestination']);
 
@@ -37,7 +42,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('get_attendance_record', [AttendanceController::class, 'getAttendanceRecord']);
 
 
-    Route::get('get_tasks/{year}/{month}', [InspectionController::class, 'getInspection']);
+    Route::get('get_tasks/{date}', [InspectionController::class, 'getInspection']);
 
     Route::get('add_trip_fuel_odometer', [VehicleController::class, 'recordFuelAndOdometer']);
 
@@ -45,6 +50,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     //to add Notification controller routes, Vehicle controller routes, + testing them and the inspection controller
 
     Route::group(['middleware' => ['admin']], function () {
+        //needs modification
         Route::get('dashboard', [DashboardController::class, 'index']);
 
         /* *********** routes for attendance controller: admin APIs *********** */
@@ -64,7 +70,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         /* *********** routes for vehicles and fuel controller: admin APIs *********** */
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
-        Route::post('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
+
+        Route::get('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
+        Route::get('delete_vehicle/{id}', [VehicleController::class, 'delete']);
+
+        Route::get('get_drivers', [UsersController::class, 'getAllDrivers']);
+        Route::get('delete_user/{id}', [UsersController::class, 'delete']);
 
         /* *********** routes for Inspection controller: admin APIs *********** */
         Route::post('add_inspection_task', [InspectionController::class, 'addInspectionTask']);

@@ -23,6 +23,11 @@ class Vehicle extends Model
 
     public function driver()
     {
-        return $this->hasOne(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'driver_id', 'id');
+    }
+
+    public function inspectionSchedules()
+    {
+        return $this->hasMany(InspectionSchedule::class, 'vehicle_id', 'id');
     }
 }
