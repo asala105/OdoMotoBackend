@@ -64,7 +64,7 @@ class InspectionController extends Controller
     {
         $task = InspectionSchedule::where('id', $id)->first();
         $task->update([
-            'is_read' => 1
+            'status_id' => 6
         ]);
         return json_encode([
             'success' => true,

@@ -43,6 +43,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
 
     Route::get('get_tasks/{date}', [InspectionController::class, 'getInspection']);
+    Route::get('mark_task_done/{id}', [InspectionController::class, 'markDone']);
 
     Route::get('add_trip_fuel_odometer', [VehicleController::class, 'recordFuelAndOdometer']);
 
