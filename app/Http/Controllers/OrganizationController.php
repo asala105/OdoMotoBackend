@@ -10,12 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class OrganizationController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -43,15 +37,17 @@ class OrganizationController extends Controller
         return json_encode(['success' => true, 'message' => 'department successfully added', 'department' => $department]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Organization  $organization
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Organization $organization)
+    public function getAllDepartments()
     {
-        //
+        $deps = Department::all();
+        foreach ($deps as $dep) {
+            $dep->driver;
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Departments retrieved successfully',
+            'data' => $deps
+        ], 201);
     }
 
     /**

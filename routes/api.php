@@ -15,13 +15,11 @@ use App\Http\Controllers\UsersController;
 //used
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
-
-//not yet
 Route::post('register_organization', [OrganizationController::class, 'store']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     //on first login the frontend sends the expo token to the backend where it is stored in the db
-    //used
+    //used needs modification
     Route::post('register_for_notifications', [NotificationsController::class, 'registerToken']);
 
     //not yet
@@ -70,11 +68,13 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
         /* *********** routes for vehicles and fuel controller: admin APIs *********** */
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
+        Route::get('get_departments', [OrganizationController::class, 'getAllDepartments']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
 
         Route::get('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
         Route::get('delete_vehicle/{id}', [VehicleController::class, 'delete']);
 
+        Route::get('get_users', [UsersController::class, 'getAllUsers']);
         Route::get('get_drivers', [UsersController::class, 'getAllDrivers']);
         Route::get('delete_user/{id}', [UsersController::class, 'delete']);
 

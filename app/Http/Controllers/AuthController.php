@@ -18,7 +18,6 @@ class AuthController extends Controller
         $data = $request->only(
             'department_id',
             'manager_id',
-            'address_id',
             'user_type_id',
             'first_name',
             'last_name',
@@ -31,7 +30,6 @@ class AuthController extends Controller
         $validator = Validator::make($data, [
             'department_id' => 'required|integer',
             'manager_id' => 'required|integer',
-            'address_id' => 'required|integer',
             'user_type_id' => 'required|integer',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -50,7 +48,6 @@ class AuthController extends Controller
         $user = User::create([
             'department_id' => $request->department_id,
             'manager_id' => $request->manager_id,
-            'address_id' => $request->address_id,
             'user_type_id' => $request->user_type_id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
