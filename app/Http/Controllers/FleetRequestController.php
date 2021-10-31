@@ -86,12 +86,36 @@ class FleetRequestController extends Controller
         $available_drivers = User::where('user_type_id', 3)->whereNotIn('id', $users_on_leave)->get()->toArray();
 
         //get all cars with fuel level > 70 % and owned by the available drivers//needs more work!! :(
-        $vehicle_with_fuel = FuelOdometerPerTrip::where('fuel_after_trip', '>=', 70)->distinct('vehicle_id')->whereDate('updated_at', '<', Carbon::tomorrow()->subDays(1))->pluck('vehicle_id')->all();
+        $vehicle_with_fuel = FuelOdometerPerTrip::where('fuel_after_trip', '>=', 70)->distinct('vehicle_id')->whereDate('updated_at', '<', Carbon::tomorrow()->subDays(1))->get();
+        $fleet = FleetRequest::where('date', '=', date("Y-m-d", strtotime('tomorrow')))->get();
+        foreach ($fleet as $fl) {
+            shuffle($vehicle_with_fuel);
+            $random_vehicle = array_pop($vehicle_with_fuel);
+            $fl->vehicle_id = $random_vehicle->vehicle_id;
+            $fl->driver_id = $random_vehicle->driver_id;
+            $fl->save();
+        }
         return json_encode([
             'success' => true,
             'message' => 'Fleet request is canceled',
             'favailable_drivers' => $vehicle_with_fuel,
             'date' => $date,
+        ]);
+    }
+
+    public function getFleetRequests()
+    {
+        $fleet = FleetRequest::where('date', '=', date("Y-m-d", strtotime('tomorrow')))->get();
+        foreach ($fleet as $f) {
+            $f->destinations;
+            $f->vehicle;
+            $f->driver;
+            $f->department;
+        }
+        return json_encode([
+            'success' => true,
+            'message' => 'Fleet retrieved',
+            'Fleet' => $fleet,
         ]);
     }
 }

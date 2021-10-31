@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\FleetRequest;
 
 class Destination extends Model
 {
@@ -13,4 +14,9 @@ class Destination extends Model
         'location_from',
         'location_to'
     ];
+
+    function fleet()
+    {
+        return $this->belongsTo(FleetRequest::class, 'fleet_request_id', 'id');
+    }
 }

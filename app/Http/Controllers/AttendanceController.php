@@ -196,9 +196,24 @@ class AttendanceController extends Controller
         }
     }
 
-    public function getAttendanceRecordPerUser()
+    public function getAttendanceRecordPerUser(Request $request)
     {
-        $attendanceRecord = Attendance::where('status_id', 4)->orderByDesc('date')->get()->groupBy('user_id');
-        return json_encode(['success' => true, 'message' => 'attendance record successfully retrieved', 'attendance' => $attendanceRecord]);
+        $markedDates = array();
+        $attendanceRecord = Attendance::where('user_id', '=', $request->driver_id)->orderByDesc('date')->get();
+        foreach ($attendanceRecord as $attendance) {
+            $markedDates[] = ['date' => $attendance->date, 'status' => $attendance->status_id];
+            $attendance->user;
+        }
+        return json_encode(['success' => true, 'message' => 'attendance record successfully retrieved', 'attendance' => $attendanceRecord, 'marked_dates' => $markedDates]);
+    }
+    public function getAttendanceRecordPerDate($date)
+    {
+        $data = Attendance::where('date', '=', $date)->orderByDesc('date')->get();
+
+        foreach ($data as $d) {
+            $d->user;
+            $d->status;
+        }
+        return json_encode(['success' => true, 'message' => 'attendance record successfully retrieved', 'data' => $data]);
     }
 }

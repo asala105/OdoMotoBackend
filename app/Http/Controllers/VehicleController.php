@@ -34,8 +34,7 @@ class VehicleController extends Controller
             'weight' => 'required',
             'odometer' => 'required',
             'fuel_level' => 'required',
-            'is_rented' => 'required|boolean',
-            'driver_license_requirements' => 'required|string'
+            'is_rented' => 'required|boolean'
         ]);
 
         //Send failed response if request is not valid

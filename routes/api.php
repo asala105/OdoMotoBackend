@@ -55,13 +55,15 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         /* *********** routes for attendance controller: admin APIs *********** */
         Route::get('approve_attendance/{id}', [AttendanceController::class, 'approveByManager']);
         Route::get('reject_attendance/{id}', [AttendanceController::class, 'rejectByManager']);
-        Route::get('attendance_records', [AttendanceController::class, 'getAttendanceRecordPerUser']);
+        Route::post('attendance_records', [AttendanceController::class, 'getAttendanceRecordPerUser']);
+        Route::get('attendance_records_date/{date}', [AttendanceController::class, 'getAttendanceRecordPerDate']);
         Route::get('approve_attendance_hr/{id}', [AttendanceController::class, 'approveByHR']);
 
         /* *********** routes for leaves controller: admin APIs *********** */
         Route::get('approve_leave/{id}', [LeavesController::class, 'approveByManager']);
         Route::get('reject_leave/{id}', [LeavesController::class, 'rejectByManager']);
-        Route::get('leaves_records', [LeavesController::class, 'getLeavesRecordPerUser']);
+        Route::post('leaves_records', [LeavesController::class, 'getLeavesRecordPerUser']);
+        Route::post('get_filtered_leaves', [LeavesController::class, 'getFilteredLeaves']);
         Route::get('approve_leave_hr/{id}', [LeavesController::class, 'approveByHR']);
 
         // Route::get('auto_generate', [FleetRequestController::class, 'autoGenerate']);
@@ -70,10 +72,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('add_department', [OrganizationController::class, 'addDepartment']);
         Route::get('get_departments', [OrganizationController::class, 'getAllDepartments']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
-
         Route::get('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
         Route::get('delete_vehicle/{id}', [VehicleController::class, 'delete']);
-
+        Route::get('fleet_requests', [FleetRequestController::class, 'getFleetRequests']);
         Route::get('get_users', [UsersController::class, 'getAllUsers']);
         Route::get('get_drivers', [UsersController::class, 'getAllDrivers']);
         Route::get('delete_user/{id}', [UsersController::class, 'delete']);

@@ -7,6 +7,9 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
+use DateTime;
+use DatePeriod;
+use DateInterval;
 use Illuminate\Support\Facades\Validator;
 use ExpoSDK\ExpoMessage;
 use ExpoSDK\Expo;
@@ -187,9 +190,32 @@ class LeavesController extends Controller
         }
     }
 
-    public function getLeavesRecordPerUser()
+    public function getLeavesRecordPerUser(Request $request)
     {
-        $LeavesRecords = Leaves::where('status_id', 4)->orderByDesc('leave_from_date', 'leave_till_date', 'leave_type')->get()->groupBy('user_id');
-        return json_encode(['success' => true, 'message' => 'Leaves records successfully retrieved', 'Leaves' => $LeavesRecords]);
+        $markedDates = array();
+        $leavesRecord = Leaves::where('user_id', '=', $request->driver_id)->where('status_id', '=', 4)->orderByDesc('leave_from_date')->get();
+        $period = array();
+        foreach ($leavesRecord as $Leaves) {
+            $start = new DateTime($Leaves->leave_from_date);
+            $end = new DateTime($Leaves->leave_till_date);
+            $period = new DatePeriod(
+                $start,
+                new DateInterval('P1D'),
+                $end->add(new DateInterval('P1D'))
+            );
+            foreach ($period as $p) {
+                $markedDates[] = ['date' => $p->format('Y-m-d'), 'status' => $Leaves->status_id];
+            }
+        }
+        return json_encode(['success' => true, 'message' => 'Leaves record successfully retrieved', 'Leaves' => $leavesRecord, 'marked_dates' => $markedDates]);
+    }
+
+    function getFilteredLeaves(Request $request)
+    {
+        $leaves = Leaves::where('status_id', '=', $request->status_id)->where('user_id', $request->user_id)->get();
+        foreach ($leaves as $leave) {
+            $leave->driver;
+        }
+        return json_encode(['success' => true, 'message' => 'Leaves record successfully retrieved', 'Leaves' => $leaves]);
     }
 }
