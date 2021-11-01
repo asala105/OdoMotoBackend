@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
             'weight' => 1700.00,
             'odometer' => 100.00,
             'fuel_level' => 70,
-            'is_rented' => 
+            'is_rented' => 1
         ]);
 
         DB::table('vehicles')->insert([
@@ -220,124 +220,124 @@ class DatabaseSeeder extends Seeder
             'location_to' => 'Bekaa'
         ]);
         DB::table('notifications')->insert([
-            'user_id'=>1, 
-            'title'=>"Leave Request",
-            'body'=> 'A driver requested a leave.',
-            'is_read'=>0, 
-            'created_at'=> '2021-10-19 15:20:39', 
-            'updated_at'=>'2021-10-19 15:20:39',
-            'type'=>'Info'
+            'user_id' => 1,
+            'title' => "Leave Request",
+            'body' => 'A driver requested a leave.',
+            'is_read' => 0,
+            'created_at' => '2021-10-19 15:20:39',
+            'updated_at' => '2021-10-19 15:20:39',
+            'type' => 'Info'
         ]);
-        DB::table('leaves')->insert( [
-            'status_id'=>4,
-            'user_id'=>NULL,
-            'leave_from_date'=>'2021-10-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:20:39',
-            'updated_at'=>'2021-10-19 15:20:39'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'status_id'=>4,
-            'user_id'=>NULL,
-            'leave_from_date'=>'2021-09-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:21:13',
-            'updated_at'=>'2021-10-19 15:21:13'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'status_id'=>2,
-            'user_id'=>NULL,
-            'leave_from_date'=>'2021-10-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:22:41',
-            'updated_at'=>'2021-10-19 15:22:41'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'status_id'=>4,
-            'user_id'=>NULL,
-            'leave_from_date'=>'2021-08-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:23:06',
-            'updated_at'=>'2021-10-19 15:23:06'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'status_id'=>4,
-            'user_id'=>NULL,
-            'leave_from_date'=>'2021-10-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:27:20',
-            'updated_at'=>'2021-10-19 15:27:20'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'status_id'=>4,
-            'user_id'=>5,
-            'leave_from_date'=>'2021-10-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:50:40',
-            'updated_at'=>'2021-10-19 15:50:40'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'id'=>7,
-            'status_id'=>4,
-            'user_id'=>5,
-            'leave_from_date'=>'2021-09-21',
-            'leave_till_date'=>'2021-09-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:53:09',
-            'updated_at'=>'2021-10-19 15:53:09'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'id'=>8,
-            'status_id'=>4,
-            'user_id'=>4,
-            'leave_from_date'=>'2021-09-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:53:23',
-            'updated_at'=>'2021-10-19 15:53:23'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'status_id'=>4,
-            'user_id'=>4,
-            'leave_from_date'=>'2021-10-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 15:57:50',
-            'updated_at'=>'2021-10-19 15:57:50'
-            ] );
-                        
-            DB::table('leaves')->insert( [
-            'status_id'=>4,
-            'user_id'=>4,
-            'leave_from_date'=>'2021-10-21',
-            'leave_till_date'=>'2021-10-22',
-            'leave_type'=>'annual leave',
-            'details'=>NULL,
-            'created_at'=>'2021-10-19 16:11:36',
-            'updated_at'=>'2021-10-19 16:11:36'
-            ] );
+        DB::table('leaves')->insert([
+            'status_id' => 4,
+            'user_id' => NULL,
+            'leave_from_date' => '2021-10-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:20:39',
+            'updated_at' => '2021-10-19 15:20:39'
+        ]);
+
+        DB::table('leaves')->insert([
+            'status_id' => 4,
+            'user_id' => NULL,
+            'leave_from_date' => '2021-09-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:21:13',
+            'updated_at' => '2021-10-19 15:21:13'
+        ]);
+
+        DB::table('leaves')->insert([
+            'status_id' => 2,
+            'user_id' => NULL,
+            'leave_from_date' => '2021-10-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:22:41',
+            'updated_at' => '2021-10-19 15:22:41'
+        ]);
+
+        DB::table('leaves')->insert([
+            'status_id' => 4,
+            'user_id' => NULL,
+            'leave_from_date' => '2021-08-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:23:06',
+            'updated_at' => '2021-10-19 15:23:06'
+        ]);
+
+        DB::table('leaves')->insert([
+            'status_id' => 4,
+            'user_id' => NULL,
+            'leave_from_date' => '2021-10-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:27:20',
+            'updated_at' => '2021-10-19 15:27:20'
+        ]);
+
+        DB::table('leaves')->insert([
+            'status_id' => 4,
+            'user_id' => 5,
+            'leave_from_date' => '2021-10-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:50:40',
+            'updated_at' => '2021-10-19 15:50:40'
+        ]);
+
+        DB::table('leaves')->insert([
+            'id' => 7,
+            'status_id' => 4,
+            'user_id' => 5,
+            'leave_from_date' => '2021-09-21',
+            'leave_till_date' => '2021-09-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:53:09',
+            'updated_at' => '2021-10-19 15:53:09'
+        ]);
+
+        DB::table('leaves')->insert([
+            'id' => 8,
+            'status_id' => 4,
+            'user_id' => 4,
+            'leave_from_date' => '2021-09-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:53:23',
+            'updated_at' => '2021-10-19 15:53:23'
+        ]);
+
+        DB::table('leaves')->insert([
+            'status_id' => 4,
+            'user_id' => 4,
+            'leave_from_date' => '2021-10-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 15:57:50',
+            'updated_at' => '2021-10-19 15:57:50'
+        ]);
+
+        DB::table('leaves')->insert([
+            'status_id' => 4,
+            'user_id' => 4,
+            'leave_from_date' => '2021-10-21',
+            'leave_till_date' => '2021-10-22',
+            'leave_type' => 'annual leave',
+            'details' => NULL,
+            'created_at' => '2021-10-19 16:11:36',
+            'updated_at' => '2021-10-19 16:11:36'
+        ]);
     }
 }
