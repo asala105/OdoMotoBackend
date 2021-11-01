@@ -84,23 +84,27 @@ class FleetRequestController extends Controller
         $movement = FleetRequest::where('date', '=', date("Y-m-d", strtotime('today')))->where('driver_id', $userId)->first();
         $movement2 = FleetRequest::where('date', '=', date("Y-m-d", strtotime('today')))->where('user_id', $userId)->first();
 
-
-        if (!empty($movement2)) {
+        if ($movement2) {
             $movement2->destinations;
             return json_encode([
                 'success' => true,
-                'message' => 'Fleet request is canceled',
+                'message' => 'Movement plan for the employee retrieved successfully',
                 'movement' => $movement2,
             ]);
-        } else if (!empty($movement)) {
+        } else if ($movement) {
             $movement->destinations;
             return json_encode([
                 'success' => true,
-                'message' => 'Fleet request is canceled',
+                'message' => 'Movement plan for the driver retrieved successfully',
                 'movement' => $movement,
             ]);
         } else {
-            return $userId;
+            return json_encode([
+                'success' => true,
+                'message' => 'No movement plans for the current user',
+                'movement1' => $movement,
+                'movement2' => $movement2,
+            ]);
         }
     }
 
