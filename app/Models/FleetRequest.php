@@ -16,7 +16,7 @@ class FleetRequest extends Model
         'end_time',
         'purpose'
     ];
-
+    protected $table = 'fleet_requests';
     function destinations()
     {
         return $this->hasMany(Destination::class, 'fleet_request_id', 'id');
