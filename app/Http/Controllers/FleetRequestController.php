@@ -23,6 +23,7 @@ class FleetRequestController extends Controller
     {
         $user = Auth::user();
         $depId = $user->department->id;
+        $userId = $user->id;
         $validator = Validator::make($request->all(), [
             'date' => 'required|date|after:today|date_format:Y-m-d',
             'start_time' => 'required',
@@ -34,6 +35,7 @@ class FleetRequestController extends Controller
         }
         $FleetRequest = FleetRequest::create([
             'department_id' => $depId,
+            'user_id' => $userId,
             'date' => $request->date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
