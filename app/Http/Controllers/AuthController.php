@@ -105,6 +105,9 @@ class AuthController extends Controller
 
     protected function createNewToken($token)
     {
+        $user = auth()->user();
+        $user->department;
+        $user->manager;
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
