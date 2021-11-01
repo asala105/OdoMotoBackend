@@ -31,7 +31,6 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('set null');
             $table->foreign('manager_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('set null');
             $table->foreign('user_type_id')->references('id')->on('user_types')->onDelete('set null');
         });
     }
