@@ -12,7 +12,7 @@ use App\Http\Controllers\FleetRequestController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
-//used
+
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('register_organization', [OrganizationController::class, 'store']);
@@ -24,13 +24,15 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     //not yet
     Route::get('user_profile', [AuthController::class, 'userProfile']);
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
     //used
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('reset_password', [AuthController::class, 'resetPass']);
 
-    //not yet
+
     Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
     Route::post('add_destination/{id}', [FleetRequestController::class, 'addDestination']);
+    //used
     Route::get('view_movement', [FleetRequestController::class, 'view_request']);
     Route::get('cancel_fleet/{id}', [FleetRequestController::class, 'cancelRequest']);
 

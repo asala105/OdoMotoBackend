@@ -99,7 +99,8 @@ class AuthController extends Controller
     {
         $user = auth()->user();
         $user->department->organization;
-        return response()->json(auth()->user());
+        $user->manager;
+        return response()->json($user);
     }
 
     protected function createNewToken($token)
