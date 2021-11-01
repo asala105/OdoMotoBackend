@@ -19,13 +19,9 @@ Route::post('register_organization', [OrganizationController::class, 'store']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     //on first login the frontend sends the expo token to the backend where it is stored in the db
-    //used needs modification
+    //used ***** only the notifications api needs modification
     Route::post('register_for_notifications', [NotificationsController::class, 'registerToken']);
-
-    //not yet
     Route::get('user_profile', [AuthController::class, 'userProfile']);
-
-    //used
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('reset_password', [AuthController::class, 'resetPass']);
 

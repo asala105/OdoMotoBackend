@@ -59,6 +59,7 @@ class AttendanceController extends Controller
             $notification = Notification::create([
                 'user_id' => $manager,
                 'title' => 'Attendance Record',
+                'type' => 'Info',
                 'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.'
             ]);
             if (!empty($recipient)) {
@@ -93,6 +94,7 @@ class AttendanceController extends Controller
                 $notification = Notification::create([
                     'user_id' => $id,
                     'title' => 'Attendance Record',
+                    'type' => 'Approve',
                     'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.'
                 ]);
             }
@@ -129,6 +131,7 @@ class AttendanceController extends Controller
                 $notification = Notification::create([
                     'user_id' => $id,
                     'title' => 'Attendance Record',
+                    'type' => 'Reject',
                     'body' => $user->first_name . ' ' . $user->last_name . "'s attendance was rejected."
                 ]);
             }
@@ -147,6 +150,7 @@ class AttendanceController extends Controller
             $notification = Notification::create([
                 'user_id' => $user->id,
                 'title' => 'Attendance Record',
+                'type' => 'Reject',
                 'body' => 'Your attendance was rejected.'
             ]);
             if ($recipient) {
@@ -177,7 +181,8 @@ class AttendanceController extends Controller
             $notification = Notification::create([
                 'user_id' => $registeredAttendance->user_id,
                 'title' => 'Attendance Record',
-                'body' => 'Your attendance was accepted.'
+                'body' => 'Your attendance was accepted.',
+                'type' => 'Accept',
             ]);
             if (!empty($recipients)) {
                 $expo = new Expo();
