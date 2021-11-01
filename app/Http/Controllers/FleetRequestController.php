@@ -81,6 +81,13 @@ class FleetRequestController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
+        $movement = FleetRequest::where('user_id', $userId)->orWhere('driver_id', $userId)->where('date', '=', date("Y-m-d", strtotime('today')))->first();
+        $movement->destinations;
+        return json_encode([
+            'success' => true,
+            'message' => 'Fleet request is canceled',
+            'movement' => $movement,
+        ]);
     }
 
     /* **********************Admin APIs*************************** */

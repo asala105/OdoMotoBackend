@@ -31,6 +31,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     //not yet
     Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
     Route::post('add_destination/{id}', [FleetRequestController::class, 'addDestination']);
+    Route::get('view_movement', [FleetRequestController::class, 'view_request']);
 
     Route::post('leave_request', [LeavesController::class, 'request']);
     Route::get('get_leaves_record/{status_id}', [LeavesController::class, 'getLeavesRecord']);
