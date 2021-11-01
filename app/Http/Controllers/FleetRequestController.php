@@ -108,8 +108,7 @@ class FleetRequestController extends Controller
             return json_encode([
                 'success' => true,
                 'message' => 'No movement plans for the current user',
-                'movement1' => $movement,
-                'movement2' => $movement2,
+                'movement' => null,
             ]);
         }
     }
