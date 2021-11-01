@@ -77,7 +77,13 @@ class FleetRequestController extends Controller
         ]);
     }
 
+    public function view_request()
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+    }
 
+    /* **********************Admin APIs*************************** */
     public function autoGenerate()
     {
         $date = date("Y-m-d", strtotime('tomorrow'));

@@ -17,7 +17,6 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('department_id')->nullable();
             $table->unsignedInteger('manager_id')->nullable();
-            $table->unsignedInteger('address_id')->nullable();
             $table->unsignedInteger('user_type_id')->nullable();
             $table->string('first_name');
             $table->string('last_name');
