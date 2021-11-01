@@ -81,11 +81,14 @@ class FleetRequestController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
-        $movement = FleetRequest::where('date', '=', date("Y-m-d", strtotime('today')))->where('driver_id', $userId)->first();
-        $movement2 = FleetRequest::where('date', '=', date("Y-m-d", strtotime('today')))->where('user_id', $userId)->first();
+        $movement = FleetRequest::where('date', '=', date("Y-m-d", strtotime('today')))->where('driver_id', $userId)->get()->first();
+        $movement2 = FleetRequest::where('date', '=', date("Y-m-d", strtotime('today')))->where('user_id', $userId)->get()->first();
 
         if ($movement2) {
             $movement2->destinations;
+            $movement2->driver;
+            $movement2->vehicle;
+            $movement2->department;
             return json_encode([
                 'success' => true,
                 'message' => 'Movement plan for the employee retrieved successfully',
@@ -93,6 +96,9 @@ class FleetRequestController extends Controller
             ]);
         } else if ($movement) {
             $movement->destinations;
+            $movement->driver;
+            $movement->vehicle;
+            $movement->department;
             return json_encode([
                 'success' => true,
                 'message' => 'Movement plan for the driver retrieved successfully',
