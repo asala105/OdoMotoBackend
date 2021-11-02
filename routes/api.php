@@ -48,7 +48,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('get_tasks/{date}', [InspectionController::class, 'getInspection']);
     Route::get('mark_task_done/{id}', [InspectionController::class, 'markDone']);
     //not yet
-    Route::get('add_trip_fuel_odometer/{fleet_id}/{vehicle_id}', [VehicleController::class, 'recordFuelAndOdometer']);
+    Route::post('add_trip_fuel_odometer/{fleet_id}/{vehicle_id}', [VehicleController::class, 'recordFuelAndOdometer']);
 
     /***************** Admin APIs ********************* */
     Route::group(['middleware' => ['admin']], function () {
