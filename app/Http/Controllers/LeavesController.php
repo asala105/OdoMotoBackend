@@ -67,7 +67,6 @@ class LeavesController extends Controller
             'success' => true,
             'message' => 'Leave request is created, it will be sent to your manager for approval',
             'LeaveRequest' => $LeaveRequest,
-            'recipient' => $expo
         ]);
     }
 
