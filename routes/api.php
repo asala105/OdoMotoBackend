@@ -37,12 +37,11 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     /***************** Leaves Controller : user side ********************* */
     //not yet
     Route::post('leave_request', [LeavesController::class, 'request']);
-    Route::get('get_leaves_record/{status_id}', [LeavesController::class, 'getLeavesRecord']);
+    Route::get('get_leaves_record/', [LeavesController::class, 'getLeavesRecord']);
+
     /***************** Attendance Controller : user side ********************* */
-    //used
     Route::get('register_attendance', [AttendanceController::class, 'register']);
     Route::get('finalize_attendance', [AttendanceController::class, 'finalize']);
-    //not yet
     Route::get('get_attendance_record', [AttendanceController::class, 'getAttendanceRecord']);
     /***************** Inspection Controller : user side ********************* */
     //not yet
