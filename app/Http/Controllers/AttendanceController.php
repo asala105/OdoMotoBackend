@@ -18,7 +18,7 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
-        $attendanceRecord = Attendance::where('user_id', $userId)->where('status_id', 4)->orderByDesc('date')->get();
+        $attendanceRecord = Attendance::where('user_id', $userId)->orderByDesc('date')->get();
         return json_encode(['success' => true, 'message' => 'attendance record successfully retrieved', 'attendance' => $attendanceRecord]);
     }
 
