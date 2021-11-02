@@ -44,7 +44,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('finalize_attendance', [AttendanceController::class, 'finalize']);
     Route::get('get_attendance_record', [AttendanceController::class, 'getAttendanceRecord']);
     /***************** Inspection Controller : user side ********************* */
-    //not yet
     Route::get('get_tasks/{date}', [InspectionController::class, 'getTasks']);
     Route::get('mark_task_done/{id}', [InspectionController::class, 'markDone']);
 
