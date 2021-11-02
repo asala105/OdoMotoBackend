@@ -20,35 +20,40 @@ Route::post('register_organization', [OrganizationController::class, 'store']);
 Route::group(['middleware' => ['jwt.verify']], function () {
     //on first login the frontend sends the expo token to the backend where it is stored in the db
     //used ***** only the notifications api needs modification
+    /* ***********************Auth Controller: user side *********************** */
     Route::post('register_for_notifications', [NotificationsController::class, 'registerToken']);
     Route::get('user_profile', [AuthController::class, 'userProfile']);
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('reset_password', [AuthController::class, 'resetPass']);
-
-
+    /***************** Notification Controller : user side ********************* */
+    Route::get('get_notifications', [NotificationsController::class, 'getNotifications']);
+    /***************** Fleet Request Controller : user side ********************* */
+    //not yet
     Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
     Route::post('add_destination/{id}', [FleetRequestController::class, 'addDestination']);
     //used
     Route::get('view_movement', [FleetRequestController::class, 'view_request']);
     Route::get('cancel_fleet/{id}', [FleetRequestController::class, 'cancelRequest']);
-
+    /***************** Leaves Controller : user side ********************* */
+    //not yet
     Route::post('leave_request', [LeavesController::class, 'request']);
     Route::get('get_leaves_record/{status_id}', [LeavesController::class, 'getLeavesRecord']);
-
+    /***************** Attendance Controller : user side ********************* */
+    //used
     Route::get('register_attendance', [AttendanceController::class, 'register']);
     Route::get('finalize_attendance', [AttendanceController::class, 'finalize']);
+    //not yet
     Route::get('get_attendance_record', [AttendanceController::class, 'getAttendanceRecord']);
-
-
+    /***************** Inspection Controller : user side ********************* */
+    //not yet
     Route::get('get_tasks/{date}', [InspectionController::class, 'getInspection']);
     Route::get('mark_task_done/{id}', [InspectionController::class, 'markDone']);
-
+    //not yet
     Route::get('add_trip_fuel_odometer', [VehicleController::class, 'recordFuelAndOdometer']);
 
-    Route::get('get_notifications', [NotificationsController::class, 'getNotifications']);
-    //to add Notification controller routes, Vehicle controller routes, + testing them and the inspection controller
-
+    /***************** Admin APIs ********************* */
     Route::group(['middleware' => ['admin']], function () {
+        /***************** Dashboard Controller : user side ********************* */
         //needs modification
         Route::get('dashboard', [DashboardController::class, 'index']);
 
