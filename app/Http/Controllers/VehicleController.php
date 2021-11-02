@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FleetRequest;
+use App\Models\FuelOdometerPerTrip;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -130,12 +131,33 @@ class VehicleController extends Controller
         ], 201);
     }
 
-    public function recordFuelAndOdometer(Request $request, $id)
+    public function recordFuelAndOdometer(Request $request, $fleet_id, $vehicle_id)
     {
         $user = Auth::user();
-        $vehicle = $user->vehicle;
-        $todaysMovement = FleetRequest::where('vehicle_id', $vehicle->id)->where('date', date('y-m-d'))->first();
-        return ($todaysMovement);
+        $userId = $user->id;
+        $validator = Validator::make($request->all(), [
+            'odometer_before_trip' => 'required',
+            'odometer_after_trip' => 'required',
+            'fuel_before_trip' => 'required',
+            'fuel_after_trip' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        $FuelOdo = FuelOdometerPerTrip::create([
+            'vehicle_id' => $vehicle_id,
+            'fleet_request_id' => $fleet_id,
+            'odometer_before_trip' => $request->odometer_before_trip,
+            'odometer_after_trip' => $request->odometer_after_trip,
+            'fuel_before_trip' => $request->fuel_before_trip,
+            'fuel_after_trip' => $request->fuel_after_trip,
+        ]);
+        return json_encode([
+            'success' => true,
+            'message' => 'Fleet request is created, you will be notified with the drivers name before the date of the request',
+            'FuelOdo' => $FuelOdo,
+        ]);
     }
 
     public function delete($id)
