@@ -23,7 +23,7 @@ class LeavesController extends Controller
         $user = Auth::user();
         $userId = $user->id;
         $leavesRecord = Leaves::where('user_id', $userId)->where('status_id', 4)->get();
-        return json_encode(['success' => true, 'message' => 'leaves record successfully retrieved', 'attendance' => $leavesRecord]);
+        return json_encode(['success' => true, 'message' => 'leaves record successfully retrieved', 'leaves' => $leavesRecord]);
     }
     public function request(Request $request)
     {
