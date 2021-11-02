@@ -64,6 +64,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('users')->insert([
             'department_id' => 1,
+            'manager_id' => 1,
             'user_type_id' => 3,
             'first_name' => 'John',
             'last_name' => 'Doe',
@@ -76,6 +77,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'department_id' => 1,
             'user_type_id' => 4,
+            'manager_id' => 1,
             'first_name' => 'Aya',
             'last_name' => 'Harfoush',
             'email' => 'aya@mail.com',
@@ -87,6 +89,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'department_id' => 1,
             'user_type_id' => 3,
+            'manager_id' => 1,
             'first_name' => 'Goerge',
             'last_name' => 'Williams',
             'email' => 'goerge@mail.com',
@@ -98,6 +101,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'department_id' => 1,
             'user_type_id' => 3,
+            'manager_id' => 1,
             'first_name' => 'Jack',
             'last_name' => 'Waterson',
             'email' => 'jack@mail.com',
@@ -109,6 +113,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'department_id' => 1,
             'user_type_id' => 3,
+            'manager_id' => 1,
             'first_name' => 'Justin',
             'last_name' => 'Joe',
             'email' => 'joe@mail.com',

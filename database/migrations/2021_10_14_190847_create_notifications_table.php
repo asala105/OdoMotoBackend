@@ -19,7 +19,7 @@ class CreateNotificationsTable extends Migration
             $table->string('title');
             $table->mediumText('body');
             $table->boolean('is_read')->default(0);
-            $table->string('type');
+            $table->string('type')->default('Info');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

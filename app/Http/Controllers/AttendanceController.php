@@ -60,7 +60,8 @@ class AttendanceController extends Controller
                 'user_id' => $manager,
                 'title' => 'Attendance Record',
                 'type' => 'Info',
-                'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.'
+                'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.',
+                'is_read' => 0
             ]);
             if (!empty($recipient)) {
                 $expo = new Expo();
