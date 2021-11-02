@@ -73,11 +73,11 @@ class InspectionController extends Controller
         ]);
     }
 
-    public function getTasks($year, $month)
+    public function getTasks($date)
     {
         $user = Auth::user();
         $user_id = $user->id;
-        $inspectionTasks = InspectionSchedule::where('driver_id', $user_id)->whereYear('date', $year)->whereMonth('date', $month)->get()->toArray();
+        $inspectionTasks = InspectionSchedule::where('driver_id', $user_id)->where('date', $date)->get()->toArray();
         return json_encode([
             'success' => true,
             'message' => 'inspection tasks retrieved successfully',
