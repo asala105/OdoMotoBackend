@@ -33,6 +33,7 @@ class OrganizationController extends Controller
         }
 
         if ($request->organization_id) {
+            $org = $request->organization_id;
         } else {
             $user = Auth::user();
             $org = $user->department->organization;
