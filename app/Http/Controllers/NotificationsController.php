@@ -41,9 +41,8 @@ class NotificationsController extends Controller
     public function markRead($id)
     {
         $notifications = Notification::where('id', $id)->first();
-        $notifications->update([
-            'is_read' => 1
-        ]);
+        $notifications->is_read = 1;
+        $notifications->save();
         return json_encode([
             'success' => true,
             'message' => 'notifications updated successfully',
