@@ -29,10 +29,12 @@ class NotificationsController extends Controller
         $user = Auth::user();
         $userId = $user->id;
         $notifications = Notification::where('user_id', $userId)->orderByDesc('created_at')->orderByDesc('is_read')->get();
+        $count = Notification::where('user_id', $userId)->where('is_read', 0)->orderByDesc('created_at')->count();
         return json_encode([
             'success' => true,
             'message' => 'notifications retrieved successfully',
-            'notifications' => $notifications
+            'notifications' => $notifications,
+            'unread' => $count,
         ]);
     }
 
