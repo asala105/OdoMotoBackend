@@ -31,8 +31,12 @@ class OrganizationController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-        $user = Auth::user();
-        $org = $user->department->organization;
+
+        if ($request->organization_id) {
+        } else {
+            $user = Auth::user();
+            $org = $user->department->organization;
+        }
         $department = Department::create(['name' => $request->name, 'organization_id' => $org->id]);
         return json_encode(['success' => true, 'message' => 'department successfully added', 'department' => $department]);
     }

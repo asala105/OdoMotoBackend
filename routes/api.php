@@ -16,6 +16,7 @@ use App\Http\Controllers\UsersController;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('register_organization', [OrganizationController::class, 'store']);
+Route::post('add_department', [OrganizationController::class, 'addDepartment']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     //on first login the frontend sends the expo token to the backend where it is stored in the db
@@ -72,7 +73,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         // Route::get('auto_generate', [FleetRequestController::class, 'autoGenerate']);
 
         /* *********** routes for vehicles and fuel controller: admin APIs *********** */
-        Route::post('add_department', [OrganizationController::class, 'addDepartment']);
+
         Route::get('get_departments', [OrganizationController::class, 'getAllDepartments']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
         Route::get('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
