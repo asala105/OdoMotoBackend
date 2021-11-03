@@ -29,6 +29,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     /***************** Notification Controller : user side ********************* */
     Route::get('get_notifications', [NotificationsController::class, 'getNotifications']);
+    Route::get('mark_read/{id}', [NotificationsController::class, 'markRead']);
 
     /***************** Fleet Request Controller : user side ********************* */
     Route::post('fleet_request', [FleetRequestController::class, 'fleetRequest']);
