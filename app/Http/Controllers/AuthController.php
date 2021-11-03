@@ -29,7 +29,6 @@ class AuthController extends Controller
         );
         $validator = Validator::make($data, [
             'department_id' => 'required|integer',
-            'manager_id' => 'required|integer',
             'user_type_id' => 'required|integer',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
