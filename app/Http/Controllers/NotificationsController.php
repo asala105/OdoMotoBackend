@@ -21,7 +21,7 @@ class NotificationsController extends Controller
             return response()->json($validator->errors(), 422);
         }
         $available_token = NotificationToken::where('user_id', $userId)->where('ExpoToken', $request->ExpoToken)->first();
-        if (!empty($available_token)) {
+        if (empty($available_token)) {
             $token = NotificationToken::create(['user_id' => $userId, 'ExpoToken' => $request->ExpoToken]);
             return json_encode(['success' => true, 'message' => 'token successfully added', 'token' => $token]);
         } else {
