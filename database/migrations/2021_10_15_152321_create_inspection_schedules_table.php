@@ -16,11 +16,13 @@ class CreateInspectionSchedulesTable extends Migration
         Schema::create('inspection_schedules', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
+            $table->unsignedInteger('organization_id')->nullable();
             $table->unsignedInteger('status_id')->nullable();
             $table->unsignedInteger('driver_id')->nullable();
             $table->unsignedInteger('vehicle_id')->nullable();
             $table->boolean('inspection_type'); //0 for safety inspection (requires a form) 1 for maintenance 
             $table->timestamps();
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('set null');

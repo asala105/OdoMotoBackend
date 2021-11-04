@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use ExpoSDK\ExpoMessage;
 use ExpoSDK\Expo;
 use App\Models\NotificationToken;
+use App\Models\Vehicle;
 
 class FleetRequestController extends Controller
 {
@@ -24,6 +25,7 @@ class FleetRequestController extends Controller
         $user = Auth::user();
         $depId = $user->department->id;
         $userId = $user->id;
+        $orgId = $user->organization_id;
         $validator = Validator::make($request->all(), [
             'date' => 'required|date|after:today|date_format:Y-m-d',
             'start_time' => 'required',
@@ -35,12 +37,15 @@ class FleetRequestController extends Controller
         }
         $FleetRequest = FleetRequest::create([
             'department_id' => $depId,
+
             'user_id' => $userId,
             'date' => $request->date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'purpose' => $request->purpose,
         ]);
+        $FleetRequest->organization_id = $orgId;
+        $FleetRequest->save();
         return json_encode([
             'success' => true,
             'message' => 'Fleet request is created, you will be notified with the drivers name before the date of the request',
@@ -118,32 +123,38 @@ class FleetRequestController extends Controller
     /* **********************Admin APIs*************************** */
     public function autoGenerate()
     {
+        $user = Auth::user();
+        $orgId = $user->organization_id;
         $date = date("Y-m-d", strtotime('tomorrow'));
         //get all the drivers that do not have a leave tomorrow
-        $users_on_leave = Leaves::where('leave_from_date', '<=', $date)->where('leave_till_date', '>=', $date)->pluck('user_id')->all();
+        $users_on_leave = Leaves::where('organization_id', '=', $orgId)->where('leave_from_date', '<=', $date)->where('leave_till_date', '>=', $date)->pluck('user_id')->all();
         $available_drivers = User::where('user_type_id', 3)->whereNotIn('id', $users_on_leave)->get()->toArray();
-
-        //get all cars with fuel level > 70 % and owned by the available drivers//needs more work!! :(
-        $vehicle_with_fuel = FuelOdometerPerTrip::where('fuel_after_trip', '>=', 70)->distinct('vehicle_id')->whereDate('updated_at', '<', Carbon::tomorrow()->subDays(1))->get();
-        $fleet = FleetRequest::where('date', '=', date("Y-m-d", strtotime('tomorrow')))->get();
+        $available_vehicles = Vehicle::where('organization_id', '=', $orgId)->whereNotIn('driver_id', $users_on_leave)->pluck('id')->all();
+        $fleet = FleetRequest::where('organization_id', '=', $orgId)->where('date', '=', date("Y-m-d", strtotime('tomorrow')))->get();
         foreach ($fleet as $fl) {
-            shuffle($vehicle_with_fuel);
-            $random_vehicle = array_pop($vehicle_with_fuel);
-            $fl->vehicle_id = $random_vehicle->vehicle_id;
-            $fl->driver_id = $random_vehicle->driver_id;
+            shuffle($available_vehicles);
+            $random_vehicle = array_pop($available_vehicles);
+            $fl->vehicle_id = $random_vehicle;
+            $vehicle = Vehicle::where('id', $random_vehicle)->first();
+            $fl->driver_id = $vehicle->driver_id;
             $fl->save();
+            $fl->destinations;
+            $fl->vehicle;
+            $fl->driver;
+            $fl->department;
         }
         return json_encode([
             'success' => true,
-            'message' => 'Fleet request is canceled',
-            'favailable_drivers' => $vehicle_with_fuel,
-            'date' => $date,
+            'message' => 'Fleet request is generated',
+            'generated' => $fleet
         ]);
     }
 
     public function getFleetRequests()
     {
-        $fleet = FleetRequest::where('date', '=', date("Y-m-d", strtotime('tomorrow')))->get();
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $fleet = FleetRequest::where('organization_id', '=', $orgId)->where('date', '=', date("Y-m-d", strtotime('tomorrow')))->get();
         foreach ($fleet as $f) {
             $f->destinations;
             $f->vehicle;

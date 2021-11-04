@@ -18,7 +18,7 @@ class CreateDepartmentsTable extends Migration
             $table->unsignedInteger('organization_id')->nullable();
             $table->string('name');
             $table->timestamps();
-            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('set null');
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
         });
     }
 

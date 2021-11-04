@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('organization_id')->nullable();
             $table->unsignedInteger('department_id')->nullable();
             $table->unsignedInteger('manager_id')->nullable();
             $table->unsignedInteger('user_type_id')->nullable();
@@ -32,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('set null');
             $table->foreign('manager_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('user_type_id')->references('id')->on('user_types')->onDelete('set null');
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
         });
     }
 

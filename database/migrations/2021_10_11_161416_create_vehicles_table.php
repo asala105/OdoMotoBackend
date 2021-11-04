@@ -16,6 +16,7 @@ class CreateVehiclesTable extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('driver_id')->nullable();
+            $table->unsignedInteger('organization_id')->nullable();
             $table->string('category');
             $table->string('registration_code');
             $table->string('plate_number');
@@ -27,6 +28,7 @@ class CreateVehiclesTable extends Migration
             $table->mediumText('driver_license_requirements')->nullable();
             $table->timestamps();
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
         });
     }
 

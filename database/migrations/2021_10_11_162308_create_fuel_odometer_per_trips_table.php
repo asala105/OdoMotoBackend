@@ -15,6 +15,7 @@ class CreateFuelOdometerPerTripsTable extends Migration
     {
         Schema::create('fuel_odometer_values_per_trip', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('organization_id')->nullable();
             $table->unsignedInteger('vehicle_id')->nullable();
             $table->unsignedInteger('fleet_request_id')->nullable();
             $table->float('odometer_before_trip');
@@ -23,6 +24,7 @@ class CreateFuelOdometerPerTripsTable extends Migration
             $table->float('fuel_after_trip');
             $table->timestamps();
             $table->foreign('vehicle_id')->references('id')->on('vehicles');
+            $table->foreign('organization_id')->references('id')->on('organizations')->onDelete('cascade');
             $table->foreign('fleet_request_id')->references('id')->on('fleet_requests');
         });
     }

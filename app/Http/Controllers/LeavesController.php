@@ -29,6 +29,7 @@ class LeavesController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
+        $orgId = $user->organization_id;
         $validator = Validator::make($request->all(), [
             'leave_from_date' => 'required|date|after_or_equal:today|date_format:Y-m-d',
             'leave_till_date' => 'required|date|after_or_equal:leave_from_date|date_format:Y-m-d',
@@ -45,6 +46,8 @@ class LeavesController extends Controller
             'leave_type' => $request->leave_type,
             'details' => $request->details,
         ]);
+        $LeaveRequest->organization_id = $orgId;
+        $LeaveRequest->save();
         $manager = $user->manager_id;
         $recipient = NotificationToken::where('user_id', '=', $manager)->pluck('ExpoToken')->all();
         $notification = Notification::create([
@@ -123,6 +126,7 @@ class LeavesController extends Controller
                 $notification = Notification::create([
                     'user_id' => $id,
                     'title' => 'Leave Request',
+                    'type' => 'Reject',
                     'body' => $user->first_name . ' ' . $user->last_name . "'s leave request was rejected."
                 ]);
             }
@@ -140,6 +144,7 @@ class LeavesController extends Controller
             $notification = Notification::create([
                 'user_id' => $user->id,
                 'title' => 'Leave Request',
+                'type' => 'Reject',
                 'body' => 'Your leave request was rejected.'
             ]);
             if ($recipient) {
@@ -170,6 +175,7 @@ class LeavesController extends Controller
             $notification = Notification::create([
                 'user_id' => $LeaveRequest->user_id,
                 'title' => 'Leave Request',
+                'type' => 'Accept',
                 'body' => 'Your leave request was accepted.'
             ]);
             if (!empty($recipients)) {

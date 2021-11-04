@@ -26,6 +26,7 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         $userId = $user->id;
+        $orgId = $user->organization_id;
         $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->get()->toArray();
         if (empty($registeredAttendance)) {
             $attendance = Attendance::create([
@@ -35,6 +36,8 @@ class AttendanceController extends Controller
                 'working_from' => date("H:i"),
                 'working_to' => date("H:i"),
             ]);
+            $attendance->organization_id = $orgId;
+            $attendance->save();
             return json_encode(['success' => true, 'message' => 'attendance record is created', 'attendance' => $attendance]);
         } else {
             return json_encode(['success' => false, 'message' => 'attendance record is already created', 'attendance' => $registeredAttendance]);
@@ -214,7 +217,9 @@ class AttendanceController extends Controller
     }
     public function getAttendanceRecordPerDate($date)
     {
-        $data = Attendance::where('date', '=', $date)->orderByDesc('date')->get();
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $data = Attendance::where('organization_id', '=', $orgId)->where('date', '=', $date)->orderByDesc('date')->get();
 
         foreach ($data as $d) {
             $d->user;

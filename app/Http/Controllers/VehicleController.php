@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FleetRequest;
 use App\Models\FuelOdometerPerTrip;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -13,6 +12,8 @@ class VehicleController extends Controller
 {
     public function addVehicle(Request $request)
     {
+        $user = Auth::user();
+        $orgId = $user->organization_id;
         //Validate data
         $data = $request->only(
             'driver_id',
@@ -56,7 +57,8 @@ class VehicleController extends Controller
             'is_rented' => $request->is_rented,
             'driver_license_requirements' => $request->driver_license_requirements,
         ]);
-
+        $vehicle->organization_id = $orgId;
+        $vehicle->save();
         return response()->json([
             'success' => true,
             'message' => 'Vehicle added successfully',
@@ -66,7 +68,9 @@ class VehicleController extends Controller
 
     public function viewVehiclesInfo()
     {
-        $vehicles = Vehicle::all();
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $vehicles = Vehicle::where('organization_id', '=', $orgId)->get();
         foreach ($vehicles as $vehicle) {
             $vehicle->driver;
         }
@@ -134,7 +138,7 @@ class VehicleController extends Controller
     public function recordFuelAndOdometer(Request $request, $fleet_id, $vehicle_id)
     {
         $user = Auth::user();
-        $userId = $user->id;
+        $orgId = $user->organization_id;
         $validator = Validator::make($request->all(), [
             'odometer_before_trip' => 'required',
             'odometer_after_trip' => 'required',
@@ -153,9 +157,11 @@ class VehicleController extends Controller
             'fuel_before_trip' => $request->fuel_before_trip,
             'fuel_after_trip' => $request->fuel_after_trip,
         ]);
+        $FuelOdo->organization_id = $orgId;
+        $FuelOdo->save();
         return json_encode([
             'success' => true,
-            'message' => 'Fleet request is created, you will be notified with the drivers name before the date of the request',
+            'message' => 'Data successfully added',
             'FuelOdo' => $FuelOdo,
         ]);
     }
@@ -167,6 +173,22 @@ class VehicleController extends Controller
             'success' => true,
             'message' => 'Vehicle deleted',
             'vehicle' => $vehicle
+        ]);
+    }
+
+    public function getFuelOdometerData()
+    {
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $FuelOdo = FuelOdometerPerTrip::where('organization_id', $orgId)->get();
+        foreach ($FuelOdo as $Fuel) {
+            $Fuel->fleet;
+            $Fuel->vehicle;
+        }
+        return json_encode([
+            'success' => true,
+            'message' => 'Data retrieved successfully',
+            'data' => $FuelOdo
         ]);
     }
 }

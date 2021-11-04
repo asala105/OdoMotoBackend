@@ -54,7 +54,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     /***************** Admin APIs ********************* */
     Route::group(['middleware' => ['admin']], function () {
         /***************** Dashboard Controller : user side ********************* */
-        //needs modification
         Route::get('dashboard', [DashboardController::class, 'index']);
 
         /* *********** routes for attendance controller: admin APIs *********** */
@@ -71,18 +70,19 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('get_filtered_leaves', [LeavesController::class, 'getFilteredLeaves']);
         Route::get('approve_leave_hr/{id}', [LeavesController::class, 'approveByHR']);
 
-        // Route::get('auto_generate', [FleetRequestController::class, 'autoGenerate']);
-
         /* *********** routes for vehicles and fuel controller: admin APIs *********** */
-
         Route::get('get_departments', [OrganizationController::class, 'getAllDepartments']);
         Route::post('add_vehicle', [VehicleController::class, 'addVehicle']);
         Route::get('view_vehicles', [VehicleController::class, 'viewVehiclesInfo']);
         Route::get('delete_vehicle/{id}', [VehicleController::class, 'delete']);
-        Route::get('fleet_requests', [FleetRequestController::class, 'getFleetRequests']);
         Route::get('get_users', [UsersController::class, 'getAllUsers']);
         Route::get('get_drivers', [UsersController::class, 'getAllDrivers']);
         Route::get('delete_user/{id}', [UsersController::class, 'delete']);
+
+        /******************* FuelOdometerPerTrip and fleet ************************ */
+        Route::get('fleet_requests', [FleetRequestController::class, 'getFleetRequests']);
+        Route::get('fuel_odometer_values', [VehicleController::class, 'getFuelOdometerData']);
+        Route::get('auto_generate', [FleetRequestController::class, 'autoGenerate']);
 
         /* *********** routes for Inspection controller: admin APIs *********** */
         Route::post('add_inspection_task', [InspectionController::class, 'addInspectionTask']);

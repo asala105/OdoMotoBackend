@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InspectionSchedule;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Validator;
 
 class InspectionController extends Controller
@@ -12,7 +13,9 @@ class InspectionController extends Controller
     /* *********************Admin side************************ */
     public function getInspection($date)
     {
-        $inspectionTasks = InspectionSchedule::where('date', $date)->get();
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $inspectionTasks = InspectionSchedule::where('organization_id', $orgId)->where('date', $date)->get();
         foreach ($inspectionTasks as $task) {
             $task->driver;
             $task->vehicle;
@@ -26,6 +29,8 @@ class InspectionController extends Controller
     }
     public function addInspectionTask(Request $request)
     {
+        $user = Auth::user();
+        $orgId = $user->organization_id;
         $validator = Validator::make($request->all(), [
             'date' => 'required|date|after_or_equal:today|date_format:Y-m-d',
             'inspection_type' => 'required',
@@ -38,10 +43,13 @@ class InspectionController extends Controller
         $inspectionSchedule = InspectionSchedule::create([
             'status_id' => 7,
             'date' => $request->date,
+
             'inspection_type' => $request->inspection_type,
             'driver_id' => $request->driver_id,
             'vehicle_id' => $request->vehicle_id,
         ]);
+        $inspectionSchedule->organization_id = $orgId;
+        $inspectionSchedule->save();
         return json_encode([
             'success' => true,
             'message' => 'inspection task is created',

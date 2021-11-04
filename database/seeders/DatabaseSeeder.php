@@ -54,6 +54,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'department_id' => 1,
             'user_type_id' => 1,
+            'organization_id' => 1,
             'first_name' => 'admin',
             'last_name' => 'admin',
             'email' => 'admin@mail.com',
@@ -78,6 +79,7 @@ class DatabaseSeeder extends Seeder
             'department_id' => 1,
             'user_type_id' => 4,
             'manager_id' => 1,
+            'organization_id' => 1,
             'first_name' => 'Aya',
             'last_name' => 'Harfoush',
             'email' => 'aya@mail.com',
@@ -90,6 +92,7 @@ class DatabaseSeeder extends Seeder
             'department_id' => 1,
             'user_type_id' => 3,
             'manager_id' => 1,
+            'organization_id' => 1,
             'first_name' => 'Goerge',
             'last_name' => 'Williams',
             'email' => 'goerge@mail.com',
@@ -102,6 +105,7 @@ class DatabaseSeeder extends Seeder
             'department_id' => 1,
             'user_type_id' => 3,
             'manager_id' => 1,
+            'organization_id' => 1,
             'first_name' => 'Jack',
             'last_name' => 'Waterson',
             'email' => 'jack@mail.com',
@@ -114,6 +118,7 @@ class DatabaseSeeder extends Seeder
             'department_id' => 1,
             'user_type_id' => 3,
             'manager_id' => 1,
+            'organization_id' => 1,
             'first_name' => 'Justin',
             'last_name' => 'Joe',
             'email' => 'joe@mail.com',
@@ -125,6 +130,7 @@ class DatabaseSeeder extends Seeder
         DB::table('vehicles')->insert([
             'id' => 3,
             'driver_id' => 6,
+            'organization_id' => 1,
             'category' => 'Van',
             'registration_code' => 'rec003',
             'plate_number' => 'LB 1238263',
@@ -138,6 +144,7 @@ class DatabaseSeeder extends Seeder
         DB::table('vehicles')->insert([
             'id' => 4,
             'driver_id' => 5,
+            'organization_id' => 1,
             'category' => '4x4',
             'registration_code' => 'rec009',
             'plate_number' => '1238483 LB',
@@ -150,6 +157,7 @@ class DatabaseSeeder extends Seeder
         DB::table('vehicles')->insert([
             'id' => 5,
             'driver_id' => 3,
+            'organization_id' => 1,
             'category' => 'Car',
             'registration_code' => 'rec010',
             'plate_number' => '12384 LB',
@@ -162,6 +170,7 @@ class DatabaseSeeder extends Seeder
         DB::table('vehicles')->insert([
             'id' => 6,
             'driver_id' => 6,
+            'organization_id' => 1,
             'category' => '4x4',
             'registration_code' => 'rec011',
             'plate_number' => '18483 LB',
@@ -174,6 +183,7 @@ class DatabaseSeeder extends Seeder
         DB::table('vehicles')->insert([
             'id' => 7,
             'driver_id' => 5,
+            'organization_id' => 1,
             'category' => '4x4',
             'registration_code' => 'rec012',
             'plate_number' => '1238483 ZH',
@@ -186,6 +196,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('attendances')->insert([
             'id' => 1,
+            'organization_id' => 1,
             'user_id' => 5,
             'status_id' => 4,
             'date' => '2021-10-15',
@@ -194,6 +205,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('attendances')->insert([
             'id' => 2,
+            'organization_id' => 1,
             'user_id' => 5,
             'status_id' => 1,
             'date' => '2021-10-16',
@@ -202,6 +214,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('attendances')->insert([
             'id' => 3,
+            'organization_id' => 1,
             'user_id' => 5,
             'status_id' => 5,
             'date' => '2021-10-17',
@@ -210,6 +223,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('fleet_requests')->insert([
             'id' => 1,
+            'organization_id' => 1,
             'vehicle_id' => 5,
             'driver_id' => 5,
             'department_id' => 1,
@@ -235,6 +249,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('leaves')->insert([
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => NULL,
             'leave_from_date' => '2021-10-21',
             'leave_till_date' => '2021-10-22',
@@ -246,6 +261,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => NULL,
             'leave_from_date' => '2021-09-21',
             'leave_till_date' => '2021-10-22',
@@ -257,6 +273,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'status_id' => 2,
+            'organization_id' => 1,
             'user_id' => NULL,
             'leave_from_date' => '2021-10-21',
             'leave_till_date' => '2021-10-22',
@@ -268,6 +285,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => NULL,
             'leave_from_date' => '2021-08-21',
             'leave_till_date' => '2021-10-22',
@@ -279,6 +297,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => NULL,
             'leave_from_date' => '2021-10-21',
             'leave_till_date' => '2021-10-22',
@@ -290,6 +309,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => 5,
             'leave_from_date' => '2021-10-21',
             'leave_till_date' => '2021-10-22',
@@ -301,6 +321,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'id' => 7,
+            'organization_id' => 1,
             'status_id' => 4,
             'user_id' => 5,
             'leave_from_date' => '2021-09-21',
@@ -314,6 +335,7 @@ class DatabaseSeeder extends Seeder
         DB::table('leaves')->insert([
             'id' => 8,
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => 4,
             'leave_from_date' => '2021-09-21',
             'leave_till_date' => '2021-10-22',
@@ -325,6 +347,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => 4,
             'leave_from_date' => '2021-10-21',
             'leave_till_date' => '2021-10-22',
@@ -336,6 +359,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('leaves')->insert([
             'status_id' => 4,
+            'organization_id' => 1,
             'user_id' => 4,
             'leave_from_date' => '2021-10-21',
             'leave_till_date' => '2021-10-22',

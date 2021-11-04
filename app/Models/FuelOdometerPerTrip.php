@@ -18,4 +18,14 @@ class FuelOdometerPerTrip extends Model
         'fuel_before_trip',
         'fuel_after_trip',
     ];
+
+    public function fleet()
+    {
+        return $this->belongsTo(FleetRequest::class, 'fleet_request_id', 'id');
+    }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
+    }
 }

@@ -17,6 +17,7 @@ class AuthController extends Controller
         //Validate data
         $data = $request->only(
             'department_id',
+            'organization_id',
             'manager_id',
             'user_type_id',
             'first_name',
@@ -29,6 +30,7 @@ class AuthController extends Controller
         );
         $validator = Validator::make($data, [
             'department_id' => 'required|integer',
+            'organization_id' => 'required|integer',
             'user_type_id' => 'required|integer',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -45,7 +47,7 @@ class AuthController extends Controller
 
         //Request is valid, create new user
         $user = User::create([
-            'department_id' => $request->department_id,
+
             'manager_id' => $request->manager_id,
             'user_type_id' => $request->user_type_id,
             'first_name' => $request->first_name,
@@ -56,7 +58,9 @@ class AuthController extends Controller
             'phone_nb' => $request->phone_nb,
             'password' => bcrypt($request->date_of_birth)
         ]);
-
+        $user->department_id =  $request->department_id;
+        $user->organization_id = $request->organization_id;
+        $user->save();
         //User created, return success response
         return response()->json([
             'success' => true,

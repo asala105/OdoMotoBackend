@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +12,9 @@ class UsersController extends Controller
 {
     public function getAllUsers()
     {
-        $users = User::all();
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $users = User::where('organization_id', '=', $orgId)->get();
         foreach ($users as $user) {
             $user->department;
             $user->manager;
@@ -25,7 +28,9 @@ class UsersController extends Controller
 
     public function getAllDrivers()
     {
-        $drivers = User::where('user_type_id', '=', 3)->get();
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $drivers = User::where('organization_id', '=', $orgId)->where('user_type_id', '=', 3)->get();
         foreach ($drivers as $driver) {
             $driver->department;
             $driver->manager;

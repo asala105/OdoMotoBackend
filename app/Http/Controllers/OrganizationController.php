@@ -43,7 +43,9 @@ class OrganizationController extends Controller
 
     public function getAllDepartments()
     {
-        $deps = Department::all();
+        $user = Auth::user();
+        $orgId = $user->organization_id;
+        $deps = Department::where('organization_id', '=', $orgId)->get();
         foreach ($deps as $dep) {
             $dep->driver;
         }
