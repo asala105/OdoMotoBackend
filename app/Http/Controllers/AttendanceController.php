@@ -62,10 +62,11 @@ class AttendanceController extends Controller
             $notification = Notification::create([
                 'user_id' => $manager,
                 'title' => 'Attendance Record',
-                'type' => 'Info',
                 'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.',
                 'is_read' => 0
             ]);
+            $notification->type = 'Info';
+            $notification->save();
             if (!empty($recipient)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())
@@ -98,9 +99,10 @@ class AttendanceController extends Controller
                 $notification = Notification::create([
                     'user_id' => $id,
                     'title' => 'Attendance Record',
-                    'type' => 'Approve',
                     'body' => $user->first_name . ' ' . $user->last_name . ' registered attendance.'
                 ]);
+                $notification->type = 'Approve';
+                $notification->save();
             }
             if (!empty($recipients)) {
                 $expo = new Expo();
@@ -135,9 +137,10 @@ class AttendanceController extends Controller
                 $notification = Notification::create([
                     'user_id' => $id,
                     'title' => 'Attendance Record',
-                    'type' => 'Reject',
                     'body' => $user->first_name . ' ' . $user->last_name . "'s attendance was rejected."
                 ]);
+                $notification->type = 'Reject';
+                $notification->save();
             }
             $expo = new Expo();
             if (!empty($recipients)) {
@@ -154,9 +157,10 @@ class AttendanceController extends Controller
             $notification = Notification::create([
                 'user_id' => $user->id,
                 'title' => 'Attendance Record',
-                'type' => 'Reject',
                 'body' => 'Your attendance was rejected.'
             ]);
+            $notification->type = 'Reject';
+            $notification->save();
             if ($recipient) {
                 $message2 = (new ExpoMessage())
                     ->setTitle('Attendance Record')
@@ -186,8 +190,9 @@ class AttendanceController extends Controller
                 'user_id' => $registeredAttendance->user_id,
                 'title' => 'Attendance Record',
                 'body' => 'Your attendance was accepted.',
-                'type' => 'Accept',
             ]);
+            $notification->type = 'Accept';
+            $notification->save();
             if (!empty($recipients)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())
