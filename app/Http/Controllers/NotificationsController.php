@@ -15,14 +15,20 @@ class NotificationsController extends Controller
         $user = Auth::user();
         $userId = $user->id;
         $validator = Validator::make($request->all(), [
-            'ExpoToken' => 'required|string|unique:notification_tokens',
+            'ExpoToken' => 'required|string',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-        $token = NotificationToken::create(['user_id' => $userId, 'ExpoToken' => $request->ExpoToken]);
-        return json_encode(['success' => true, 'message' => 'token successfully added', 'token' => $token]);
+        $available_token = NotificationToken::where('user_id', $userId)->where('ExpoToken', $request->ExpoToken)->first();
+        if (!empty($available_token)) {
+            $token = NotificationToken::create(['user_id' => $userId, 'ExpoToken' => $request->ExpoToken]);
+            return json_encode(['success' => true, 'message' => 'token successfully added', 'token' => $token]);
+        } else {
+            return json_encode(['success' => true, 'message' => 'token already exists', 'token' => $available_token]);
+        }
     }
+
 
     public function getNotifications()
     {
