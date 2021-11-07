@@ -155,7 +155,7 @@ class FleetRequestController extends Controller
             ]);
             $notification2->type = 'Info';
             $notification2->save();
-            $recipients = NotificationToken::where('user_id', $fl->user_id)->orWhere('driver_id', $fl->driver_id)->pluck('ExpoToken')->all();
+            $recipients = NotificationToken::where('user_id', $fl->user_id)->orWhere('user_id', $fl->driver_id)->pluck('ExpoToken')->all();
             if (!empty($recipients)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())
