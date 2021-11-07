@@ -101,6 +101,7 @@ class AuthController extends Controller
     public function userProfile()
     {
         $user = auth()->user();
+        $user->department;
         $user->department->organization;
         $user->manager;
         return response()->json($user);
