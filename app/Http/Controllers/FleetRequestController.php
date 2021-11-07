@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\FleetRequest;
 use App\Models\Destination;
-use App\Models\FuelOdometerPerTrip;
-use App\Models\User;
+use App\Models\Notification;
+use App\Models\NotificationToken;
 use App\Models\Leaves;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use ExpoSDK\ExpoMessage;
 use ExpoSDK\Expo;
-use App\Models\NotificationToken;
 use App\Models\Vehicle;
 
 class FleetRequestController extends Controller
@@ -37,7 +36,6 @@ class FleetRequestController extends Controller
         }
         $FleetRequest = FleetRequest::create([
             'department_id' => $depId,
-
             'user_id' => $userId,
             'date' => $request->date,
             'start_time' => $request->start_time,
@@ -128,7 +126,6 @@ class FleetRequestController extends Controller
         $date = date("Y-m-d", strtotime('tomorrow'));
         //get all the drivers that do not have a leave tomorrow
         $users_on_leave = Leaves::where('organization_id', '=', $orgId)->where('leave_from_date', '<=', $date)->where('leave_till_date', '>=', $date)->pluck('user_id')->all();
-        $available_drivers = User::where('user_type_id', 3)->whereNotIn('id', $users_on_leave)->get()->toArray();
         $available_vehicles = Vehicle::where('organization_id', '=', $orgId)->whereNotIn('driver_id', $users_on_leave)->pluck('id')->all();
         $fleet = FleetRequest::where('organization_id', '=', $orgId)->where('date', '=', date("Y-m-d", strtotime('tomorrow')))->get();
         foreach ($fleet as $fl) {
@@ -142,6 +139,34 @@ class FleetRequestController extends Controller
             $fl->vehicle;
             $fl->driver;
             $fl->department;
+
+            $notification1 = Notification::create([
+                'user_id' => $fl->user_id,
+                'title' => 'Movement Plan',
+                'body' => 'The movement plan for tomorrow is generated.',
+            ]);
+            $notification1->type = 'Info';
+            $notification1->save();
+
+            $notification2 = Notification::create([
+                'user_id' => $fl->driver_id,
+                'title' => 'Movement Plan',
+                'body' => 'The movement plan for tomorrow is generated.',
+            ]);
+            $notification2->type = 'Info';
+            $notification2->save();
+            $recipients = NotificationToken::where('user_id', $fl->user_id)->orWhere('driver_id', $fl->driver_id)->pluck('ExpoToken')->all();
+            if (!empty($recipients)) {
+                $expo = new Expo();
+                $message = (new ExpoMessage())
+                    ->setTitle('Movement Plan')
+                    ->setBody('The movement plan for tomorrow is generated.')
+                    ->setData(['id' => 1])
+                    ->setChannelId('default')
+                    ->setBadge(0)
+                    ->playSound();
+                $expo->send($message)->to($recipients)->push();
+            }
         }
         return json_encode([
             'success' => true,

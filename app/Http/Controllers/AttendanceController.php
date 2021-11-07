@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use ExpoSDK\ExpoMessage;
 use ExpoSDK\Expo;
 use App\Models\NotificationToken;
@@ -51,7 +51,7 @@ class AttendanceController extends Controller
         $manager = $user->manager_id; //needed to send the notification
         $registeredAttendance = Attendance::where('user_id', $userId)->where('date', date('Y-m-d'))->first();
         if (empty($registeredAttendance)) {
-            return json_encode(['success' => false, 'message' => 'you did not register you attendance at the begining of the day!']);
+            return json_encode(['success' => false, 'message' => 'you did not register you attendance at the beginning of the day!']);
         } else if ($registeredAttendance->working_from == $registeredAttendance->working_to) {
             //update the time when he finishes his work and the status in order to send a message to the manager to approve it 
             $registeredAttendance->status_id = 2;
