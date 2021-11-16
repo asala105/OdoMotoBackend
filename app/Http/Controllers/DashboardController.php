@@ -56,13 +56,6 @@ class DashboardController extends Controller
             ->GroupBy('month')
             ->get();
 
-        $LeavesChartLabels = [];
-        $LeavesChartData = [];
-        // foreach ($Leaves_freq as $freq) {
-        //     $vehicle = $freq->vehicle;
-        //     $MaintenanceChartLabels[] = $vehicle->registration_code;
-        //     $MaintenanceChartData[] = $freq->counter;
-        // }
         $FuelChartLabels = [];
         $FuelChartData = [];
         $fuel = FuelOdometerPerTrip::where('organization_id', '=', $orgId)->GroupBy('vehicle_id')->selectRaw('vehicle_id, sum((ABS(fuel_before_trip-fuel_after_trip))/(odometer_after_trip-odometer_before_trip))*100/count(*) as fuel, count(*)')->get();
