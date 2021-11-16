@@ -55,6 +55,8 @@ class LeavesController extends Controller
             'title' => 'Leave Request',
             'body' => $user->first_name . ' ' . $user->last_name . ' requested a leave.'
         ]);
+        $notification->type = 'Info';
+        $notification->save();
         if (!empty($recipient)) {
             $expo = new Expo();
             $message = (new ExpoMessage())
@@ -92,6 +94,8 @@ class LeavesController extends Controller
                     'title' => 'Leave Request',
                     'body' => $user->first_name . ' ' . $user->last_name . ' has requested a leave.'
                 ]);
+                $notification->type = 'Approve';
+                $notification->save();
             }
             if (!empty($recipients)) {
                 $expo = new Expo();
@@ -129,6 +133,8 @@ class LeavesController extends Controller
                     'type' => 'Reject',
                     'body' => $user->first_name . ' ' . $user->last_name . "'s leave request was rejected."
                 ]);
+                $notification->type = 'Reject';
+                $notification->save();
             }
             if (!empty($recipients)) {
                 $message1 = (new ExpoMessage())
@@ -147,6 +153,8 @@ class LeavesController extends Controller
                 'type' => 'Reject',
                 'body' => 'Your leave request was rejected.'
             ]);
+            $notification->type = 'Reject';
+            $notification->save();
             if ($recipient) {
                 $message2 = (new ExpoMessage())
                     ->setTitle('Attendance Record')
@@ -178,6 +186,8 @@ class LeavesController extends Controller
                 'type' => 'Accept',
                 'body' => 'Your leave request was accepted.'
             ]);
+            $notification->type = 'Accept';
+            $notification->save();
             if (!empty($recipients)) {
                 $expo = new Expo();
                 $message = (new ExpoMessage())

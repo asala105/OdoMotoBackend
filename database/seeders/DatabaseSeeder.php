@@ -156,7 +156,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('vehicles')->insert([
             'id' => 5,
-            'driver_id' => 3,
+            'driver_id' => 5,
             'organization_id' => 1,
             'category' => 'Car',
             'registration_code' => 'rec010',
